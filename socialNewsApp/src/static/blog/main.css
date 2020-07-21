@@ -6,6 +6,10 @@ header {
     background-color: #205067;
 }
 
+.container {
+    padding: 15px;
+}
+
 .navbar-nav {
     list-style-type: none;
     display: flex;
@@ -79,9 +83,30 @@ legend {
     padding: 5px 10px;
 }
 
-.account-img {
+.small-account-img {
     width: 35px;
 }
+
+.account-img {
+    width: 150px;
+}
+
+.username {
+    color: orangered;
+}
+
+.profile-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.profile-label{
+    width: 70px;
+}
+
+
 
 @media (max-width: 768px) {
 

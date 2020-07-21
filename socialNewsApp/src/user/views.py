@@ -18,5 +18,5 @@ def register(request):
 
 
 def profile(request,pk):
-    post = get_object_or_404(User, pk=pk)
-    return render(request, 'users/profile.html')
+    user_data = get_object_or_404(User, pk=pk)
+    return render(request, 'users/profile.html', {'user': user_data})

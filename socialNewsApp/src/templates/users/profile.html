@@ -1,4 +1,58 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <span> Profil </span>
+    <div class="container">
+      <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+      <div class="row bg-light m-4">
+        <div class="col-md-2">
+            <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
+        </div>
+        <div class="col-md-10 profile-box">
+            <span class="username">{{ user.username }} </span>
+            <span> na wypoku od {{ user.date_joined }} </span>
+        </div>
+      </div>
+
+        <div class="bg-light m-4">
+          <div class="row justify-content-start">
+            <div class="col-4">
+              <label class="profile-label">Imię:</label>
+            </div>
+            <div class="col-4">
+              <div class="col">{{ user.username }}</div>
+            </div>
+          </div>
+
+          <div class="row justify-content-start">
+            <div class="col-4">
+              <label class="profile-label">Wiek:</label>
+            </div>
+            <div class="col-4">
+              <div class="col">{{ user.birth_date }}</div>
+            </div>
+          </div>
+
+          <div class="row justify-content-start">
+            <div class="col-4">
+              <label class="profile-label">O mnie:</label>
+            </div>
+            <div class="col-4">
+              <div class="col">{{ user.bio }}</div>
+            </div>
+          </div>
+        </div>
+              <!-- Columns are always 50% wide, on mobile and desktop -->
+      <div class="row bg-light m-4">
+        <div class="col-12"> Aktywności użytkownika</div>
+      </div>
+
+      <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+      <div class="row bg-light m-4">
+        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+      </div>
+
+
+    </div>
+
 {% endblock content %}
