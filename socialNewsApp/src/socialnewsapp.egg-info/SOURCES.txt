@@ -1,0 +1,6 @@
+README.rst
+src/socialnewsapp/__init__.py
+src/socialnewsapp.egg-info/PKG-INFO
+src/socialnewsapp.egg-info/SOURCES.txt
+src/socialnewsapp.egg-info/dependency_links.txt
+src/socialnewsapp.egg-info/top_level.txt

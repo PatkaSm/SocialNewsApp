@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="PL">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+        <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+
+        {% if title %}
+            <title>Django Blog - {{ title }}</title>
+        {% else %}
+            <title>Django Blog</title>
+        {% endif %}
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="navbar navbar-expand-lg navbar-light container">
+              <a class="navbar-brand" href="{% url 'blog-home' %}">Wypok.pl</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                    <form class="form-inline my-2 my-lg-0">
+                          <input type="text" class="form-control" placeholder="szukaj po tagach" aria-label="Recipient's username" aria-describedby="button-addon2">
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-light search-button" type="button" id="button-addon2">Szukaj</button>
+                          </div>
+                    </form>
+                  </li>
+                  <li class="nav-item active">
+                    <a class="nav-link" href="#">Nowe<span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Mikroblog</a>
+                  </li>
+                    {% if user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Ulubione</a>
+                  </li>
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'profile' pk=user.id %}">{{ user.username }}</a>
+                      <a class="dropdown-item" href="#">Moje newsy</a>
+                      <a class="dropdown-item" href="#">Ustawienia</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="{% url 'logout' %}">Wyloguj</a>
+                    </div>
+                  </li>
+                  <li class="nav-item">
+
+                  </li>
+                    {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link nav-button" href="{% url 'login' %}">Logowanie</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link nav-button" href="{% url 'register' %}">Rejestracja</a>
+                  </li>
+                    {% endif %}
+                </ul>
+              </div>
+            </nav>
+        </header>
+        <div>
+        </div>
+        <main role="main" class="container pt-4 wrapper">
+          <div class="row">
+            <div class="col-md-12">
+            {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+              {% block content %}{% endblock %}
+            </div>
+          </div>
+        </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    </div>
+    </body>
+</html>
