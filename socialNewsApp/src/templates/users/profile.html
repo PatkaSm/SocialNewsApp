@@ -2,55 +2,75 @@
 {% block content %}
     <div class="container">
       <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-      <div class="row bg-light m-4">
+
+      <div class="row m-2">
+            <img class="background-img" src="{{ user.avatar.url }}" alt="avatar">
+      </div>
+      <div class="row bg-light m-2">
         <div class="col-md-2">
             <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
         </div>
         <div class="col-md-10 profile-box">
-            <span class="username">{{ user.username }} </span>
-            <span> na wypoku od {{ user.date_joined }} </span>
+            <span><span class="username"> {{ user.username }} </span> <small> na wypoku od {{ user.date_joined|date:"d F Y"}} </small></span>
         </div>
       </div>
 
-        <div class="bg-light m-4">
+        <div class="bg-light m-2">
           <div class="row justify-content-start">
-            <div class="col-4">
+            <div class="col-2">
               <label class="profile-label">Imię:</label>
             </div>
-            <div class="col-4">
-              <div class="col">{{ user.username }}</div>
+            <div class="col-3">
+              <div class="col">{{ user.first_name }}</div>
             </div>
           </div>
 
           <div class="row justify-content-start">
-            <div class="col-4">
+            <div class="col-2">
               <label class="profile-label">Wiek:</label>
             </div>
-            <div class="col-4">
-              <div class="col">{{ user.birth_date }}</div>
+            <div class="col-3">
+              <div class="col">{{ user.age }}</div>
             </div>
           </div>
 
           <div class="row justify-content-start">
-            <div class="col-4">
+            <div class="col-2">
+              <label class="profile-label">E-mail:</label>
+            </div>
+            <div class="col-3">
+              <div class="col">{{ user.public_email }}</div>
+            </div>
+          </div>
+
+          <div class="row justify-content-start">
+            <div class="col-2">
               <label class="profile-label">O mnie:</label>
             </div>
-            <div class="col-4">
+            <div class="col-8">
               <div class="col">{{ user.bio }}</div>
             </div>
           </div>
-        </div>
-              <!-- Columns are always 50% wide, on mobile and desktop -->
-      <div class="row bg-light m-4">
-        <div class="col-12"> Aktywności użytkownika</div>
-      </div>
 
-      <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
-      <div class="row bg-light m-4">
-        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-        <div class="col-6 col-md-4">.col-6 .col-md-4</div>
-      </div>
+          <div class="row justify-content-start">
+            <div class="col-2">
+              <label class="profile-label">Strona:</label>
+            </div>
+            <div class="col-3">
+              <div class="col">{{ user.user_page }}</div>
+            </div>
+          </div>
+        </div>
+
+    <div class="row  m-2">
+        <div class="bg-light col-md-8">
+
+        </div>
+
+        <div class="bg-light col-md-4">
+
+        </div>
+     </div>
 
 
     </div>

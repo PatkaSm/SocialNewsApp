@@ -1,3 +1,6 @@
+import math
+from datetime import date
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -18,9 +21,16 @@ class User(AbstractUser):
     location = models.CharField(max_length=30, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     avatar = models.ImageField(blank=True, max_length=None, default='user.png', upload_to=upload_location)
+    background = models.ImageField(blank=True, null=True,  max_length=None, upload_to=upload_location)
     gender = models.CharField(choices=GENDER_CHOICES, blank=True, max_length=1)
     facebook = models.CharField(max_length=500, blank=True)
     twitter = models.CharField(max_length=500, blank=True)
     ig = models.CharField(max_length=500, blank=True)
     public_email = models.EmailField(max_length=500, blank=True)
     user_page = models.CharField(max_length=500, blank=True)
+
+    @property
+    def age(self):
+        today = date.today()
+        result = today - self.birth_date
+        return math.floor(result.days/365)

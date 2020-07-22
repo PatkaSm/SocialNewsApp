@@ -89,10 +89,19 @@ legend {
 
 .account-img {
     width: 150px;
+    margin-top: -100px;
+    border: 2px solid white;
+}
+.background-img {
+    object-fit: cover;
+    height: 250px;
+    width: 100%;
 }
 
 .username {
-    color: orangered;
+    color: deeppink;
+    padding-right: 10px;
+    font-size: 25px;
 }
 
 .profile-box {
@@ -106,6 +115,9 @@ legend {
     width: 70px;
 }
 
+.bg-light {
+    padding: 15px;
+}
 
 
 @media (max-width: 768px) {

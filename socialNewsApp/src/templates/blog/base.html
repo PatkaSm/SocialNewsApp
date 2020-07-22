@@ -47,10 +47,10 @@
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="rounded-circle small-account-img" src="{{ user.avatar.url }}" alt="avatar">
+                        <img class="rounded-circle small-account-img" src="{{ request.user.avatar.url }}" alt="avatar">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% url 'profile' pk=user.id %}">{{ user.username }}</a>
+                      <a class="dropdown-item" href="{% url 'profile' pk=request.user.id %}">{{ request.user.username }}</a>
                       <a class="dropdown-item" href="#">Moje newsy</a>
                       <a class="dropdown-item" href="#">Ustawienia</a>
                       <div class="dropdown-divider"></div>
