@@ -4,11 +4,13 @@
       <!-- Stack the columns on mobile by making one full-width and the other half-width -->
 
       <div class="row m-2">
+          <span>Zmień zdjęcie w tle</span>
             <img class="background-img" src="{{ user.avatar.url }}" alt="avatar">
       </div>
       <div class="row bg-light m-2">
         <div class="col-md-2">
             <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
+            <span>Zmień profilowe</span>
         </div>
         <div class="col-md-10 profile-box">
             <span><span class="username"> {{ user.username }} </span> <small> na wypoku od {{ user.date_joined|date:"d F Y"}} </small></span>
@@ -62,15 +64,29 @@
           </div>
         </div>
 
-    <div class="row  m-2">
-        <div class="bg-light col-md-8">
+        <div class="bottom-box m-2">
+            <div class="first-row bg-light">
+              <div class="col-sm-12 text-center">Aktywności użytkownika
+                  <div class="row p-3">
+                      <div class="col-sm-12 col-md-4 box-item">406 akcji</div>
+                      <div class="col-sm-12 col-md-4 box-item">23 newsy</div>
+                      <div class="col-sm-12 col-md-4 box-item">666 mikroblog</div>
+                  </div>
+              </div>
+            </div>
 
+            <div class="second-row bg-light">
+              <div class="col-sm-12 text-center">Osiągnięcia
+                  <div class="row p-3">
+                      <div class="col-sm-12 col-md-4 ">Pierwsze</div>
+                      <div class="col-sm-12 col-md-4">Drugie</div>
+                      <div class="col-sm-12 col-md-4">Trzecie</div>
+                  </div>
+              </div>
+            </div>
         </div>
 
-        <div class="bg-light col-md-4">
 
-        </div>
-     </div>
 
 
     </div>

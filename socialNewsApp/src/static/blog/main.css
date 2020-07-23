@@ -119,6 +119,21 @@ legend {
     padding: 15px;
 }
 
+.bottom-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.first-row {
+    width: 70%;
+}
+
+.second-row {
+    width: 30%;
+    margin-left: 10px;
+}
+
+
 
 @media (max-width: 768px) {
 

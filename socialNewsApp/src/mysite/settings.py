@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'user',
     'blog',
+    'tag',
 ]
 
 AUTH_USER_MODEL = 'user.User'
