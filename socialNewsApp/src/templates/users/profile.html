@@ -3,21 +3,27 @@
     <div class="container">
       <!-- Stack the columns on mobile by making one full-width and the other half-width -->
 
-      <div class="row m-2">
-          <span>Zmień zdjęcie w tle</span>
-            <img class="background-img" src="{{ user.avatar.url }}" alt="avatar">
+      <div class="row m-2 background-img-div">
+          <span class="text">Zmień swoje zdjęcie w tle!</span>
+          <img class="background-img" src="{{ user.avatar.url }}" alt="avatar">
       </div>
       <div class="row bg-light m-2">
-        <div class="col-md-2">
+        <div class="col-md-2 avatar-img-div">
             <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
-            <span>Zmień profilowe</span>
+            <div class="edit-avatar"></div>
         </div>
-        <div class="col-md-10 profile-box">
+        <div class="col-md-9 profile-box">
             <span><span class="username"> {{ user.username }} </span> <small> na wypoku od {{ user.date_joined|date:"d F Y"}} </small></span>
+        </div>
+         <div class="col-md-1 col-sm-12 edit-profile-icon">
+            <i class="icon icon-pencil"></i>
         </div>
       </div>
 
         <div class="bg-light m-2">
+            <div class="row p-3">
+              <small> Hej {{ user.username }}, uzupełnij swój <span class="blue-font"> profil </span> aby użytkownicy lepiej Cię poznali</small>
+            </div>
           <div class="row justify-content-start">
             <div class="col-2">
               <label class="profile-label">Imię:</label>
