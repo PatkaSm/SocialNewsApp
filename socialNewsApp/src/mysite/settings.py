@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'crispy_forms',
     'user',
     'blog',
     'tag',
+    'mikroblog',
 ]
 
 AUTH_USER_MODEL = 'user.User'

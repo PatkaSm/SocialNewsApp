@@ -1,100 +1,99 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <div class="container">
-      <!-- Stack the columns on mobile by making one full-width and the other half-width -->
-
-      <div class="row m-2 background-img-div">
-          <span class="text">Zmień swoje zdjęcie w tle!</span>
-          <img class="background-img" src="{{ user.avatar.url }}" alt="avatar">
-      </div>
-      <div class="row bg-light m-2">
-        <div class="col-md-2 avatar-img-div">
-            <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
-            <div class="edit-avatar"></div>
-        </div>
-        <div class="col-md-9 profile-box">
-            <span><span class="username"> {{ user.username }} </span> <small> na wypoku od {{ user.date_joined|date:"d F Y"}} </small></span>
-        </div>
-         <div class="col-md-1 col-sm-12 edit-profile-icon">
-            <i class="icon icon-pencil"></i>
-        </div>
-      </div>
-
-        <div class="bg-light m-2">
-            <div class="row p-3">
-              <small> Hej {{ user.username }}, uzupełnij swój <span class="blue-font"> profil </span> aby użytkownicy lepiej Cię poznali</small>
-            </div>
-          <div class="row justify-content-start">
-            <div class="col-2">
-              <label class="profile-label">Imię:</label>
-            </div>
-            <div class="col-3">
-              <div class="col">{{ user.first_name }}</div>
-            </div>
+{% load humanize %}
+    <div class="row">
+        <div class="col-12">
+              <div class="row background-img-div mr-2 ml-2 border-line">
+                  <span class="text">Zmień swoje zdjęcie w tle!</span>
+                  {% if user.background.url != None%}
+                  <img class="background-img" src="{{ user.background.url }}" alt="avatar">
+                  {% else %}
+                      <div class="background-img">
+                       Ustaw nowe tło swojego profilu
+                      </div>
+                  {% endif %}
+              </div>
+              <div class="row bg-light mr-2 ml-2 border-line">
+                <div class="avatar-img-div">
+                    <img class="rounded-circle account-img" src="{{ user.avatar.url }}" alt="avatar">
+                    <div class="edit-avatar"></div>
+                </div>
+                <div class="profile-box">
+                    <div>
+                        <span class="username"> {{ user.username }} </span>
+                        {% if user.id == request.user.id %}
+                        <i class="icon icon-pencil"></i>
+                        {% endif %}
+                        <small> na wypoku od {{ user.date_joined|naturaltime}} </small>
+                    </div>
+                </div>
           </div>
+            <div class="bg-light mr-2 ml-2 border-line">
+                <div class="row p-3">
+                  <small> Hej {{ user.username }}, uzupełnij swój <span class="blue-font"> profil </span> aby użytkownicy lepiej Cię poznali</small>
+                </div>
+              <div class="row justify-content-start">
+                  <label class="profile-label">Imię:</label>
+                  <div >{{ user.first_name }}</div>
+              </div>
 
-          <div class="row justify-content-start">
-            <div class="col-2">
-              <label class="profile-label">Wiek:</label>
-            </div>
-            <div class="col-3">
-              <div class="col">{{ user.age }}</div>
-            </div>
-          </div>
+              <div class="row justify-content-start">
+                  <label class="profile-label">Wiek:</label>
+                    {% if user.birth_date%}
+                  <div> {{ user.birth_date | naturalday}}</div>
+                    {% endif %}
+              </div>
 
-          <div class="row justify-content-start">
-            <div class="col-2">
-              <label class="profile-label">E-mail:</label>
-            </div>
-            <div class="col-3">
-              <div class="col">{{ user.public_email }}</div>
-            </div>
-          </div>
+              <div class="row justify-content-start">
+                  <label class="profile-label">E-mail:</label>
+                  <div>{{ user.public_email }}</div>
+              </div>
 
-          <div class="row justify-content-start">
-            <div class="col-2">
-              <label class="profile-label">O mnie:</label>
-            </div>
-            <div class="col-8">
-              <div class="col">{{ user.bio }}</div>
-            </div>
-          </div>
+              <div class="row justify-content-start">
+                  <label class="profile-label">O mnie:</label>
+                  <div>{{ user.bio }}</div>
+              </div>
 
-          <div class="row justify-content-start">
-            <div class="col-2">
-              <label class="profile-label">Strona:</label>
-            </div>
-            <div class="col-3">
-              <div class="col">{{ user.user_page }}</div>
-            </div>
-          </div>
-        </div>
+              <div class="row justify-content-start">
+                  <label class="profile-label">Strona:</label>
+                  <div>{{ user.user_page }}</div>
+              </div>
 
-        <div class="bottom-box m-2">
-            <div class="first-row bg-light">
-              <div class="col-sm-12 text-center">Aktywności użytkownika
-                  <div class="row p-3">
-                      <div class="col-sm-12 col-md-4 box-item">406 akcji</div>
-                      <div class="col-sm-12 col-md-4 box-item">23 newsy</div>
-                      <div class="col-sm-12 col-md-4 box-item">666 mikroblog</div>
-                  </div>
+              <div class="row justify-content-start">
+                <div class="col-1">
+                  <i class="icon icon-instagram"></i>
+                </div>
+                <div class="col-1">
+                  <i class="icon icon-twitter-circled"></i>
+                </div>
+                <div class="col-1">
+                    <i class="icon icon-facebook-squared"></i>
+                </div>
               </div>
             </div>
 
-            <div class="second-row bg-light">
-              <div class="col-sm-12 text-center">Osiągnięcia
-                  <div class="row p-3">
-                      <div class="col-sm-12 col-md-4 ">Pierwsze</div>
-                      <div class="col-sm-12 col-md-4">Drugie</div>
-                      <div class="col-sm-12 col-md-4">Trzecie</div>
+            <div class="row mr-2 ml-2">
+                <div class="bg-light col-12 col-sm-12 col-md-9 col-lg-9 border-line">
+                  <div class="col-sm-12 text-center">Aktywności użytkownika
+                      <div class="row p-3">
+                          <div class="col-sm-12 col-md-4 box-item">406 akcji</div>
+                          <div class="col-sm-12 col-md-4 box-item">23 newsy</div>
+                          <div class="col-sm-12 col-md-4 box-item">666 mikroblog</div>
+                      </div>
                   </div>
-              </div>
+                </div>
+
+                <div class="bg-light col-12 col-sm-12 col-md-5 col-lg-3 border-line">
+                  <div class="col-sm-12 text-center">Osiągnięcia
+                      <div class="row p-3">
+                          <div class="col-sm-12 col-md-4 ">Pierwsze</div>
+                          <div class="col-sm-12 col-md-4">Drugie</div>
+                          <div class="col-sm-12 col-md-4">Trzecie</div>
+                      </div>
+                  </div>
+                </div>
             </div>
         </div>
-
-
-
-
     </div>
 
 {% endblock content %}

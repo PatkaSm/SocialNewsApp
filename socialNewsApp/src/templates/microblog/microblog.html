@@ -1,20 +1,44 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <div class="row">
-            <div class="col-md-8">
-
-            </div>
-            <div class="col-md-4">
-              <div class="content-section">
-                <h3>Our Sidebar</h3>
-                  <p class='text-muted'> You can put any information here you'd like.</p>
+        <div class="col-lg-9 col-md-12">
+            {% if posts %}
+                {% for post in posts %}
+                    <article class="media bg-light container-fluid">
+                        <div>
+                            <img class="blog-user-img" src="{{ request.user.avatar.url }}" alt="avatar">
+                        </div>
+                        <div>
+                            <div class="article-metadata">
+                                <a href="{% url 'profile' pk=post.author.id %}">{{ post.author }}</a>
+                                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+                                <i class="icon-plus-outline"></i>
+                            </div>
+                            {% if post.content %}
+                                <small class="m-3">{{ post.content}}</small>
+                            {% endif %}
+                            <div class="col-11">
+                                {% for tag in post.tag.all %}
+                                    <small class="text-muted"> <a href="#">#{{ tag.word }} </a> </small>
+                                {% endfor %}
+                            </div>
+                            <img class="col-12 col-md-12    " alt="Obrazek" src="{{ post.image.url }}">
+                            <small class="text-muted">Źródło: </small>
+                        </div>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    Nie ma żdanych wpisów, dodaj swój!
+            {% endif %}
+        </div>
+            <div class="side-section col-md-3">
+                <p class="list-group-item list-group-item-light">Ostatnio popularne</p>
                   <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Latest Posts</li>
-                    <li class="list-group-item list-group-item-light">Announcements</li>
-                    <li class="list-group-item list-group-item-light">Calendars</li>
-                    <li class="list-group-item list-group-item-light">etc</li>
+                    <li class="list-group-item list-group-item-light">Bebebebe</li>
+                    <li class="list-group-item list-group-item-light">Nananana</li>
+                    <li class="list-group-item list-group-item-light">Tytytytty</li>
+                    <li class="list-group-item list-group-item-light">Nynynynyn</li>
                   </ul>
-              </div>
             </div>
     </div>
 {% endblock content %}

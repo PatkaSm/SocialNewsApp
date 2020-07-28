@@ -119,6 +119,12 @@
       "css": "at",
       "code": 59407,
       "src": "typicons"
+    },
+    {
+      "uid": "3e674995cacc2b09692c096ea7eb6165",
+      "css": "megaphone",
+      "code": 59408,
+      "src": "fontawesome"
     }
   ]
 }

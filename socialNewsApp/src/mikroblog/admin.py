@@ -1,3 +1,4 @@
 from django.contrib import admin
+from mikroblog.models import MicroPost
 
-# Register your models here.
+admin.site.register(MicroPost)

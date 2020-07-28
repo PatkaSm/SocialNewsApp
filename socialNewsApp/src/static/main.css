@@ -1,56 +1,78 @@
 body {
     background-color: gainsboro;
 }
+/***************************************
+ * FONTS
+ ***************************************/
 
-header {
-    background-color: #205067;
+.white-font {
+    color: white;
 }
 
-ul {
-    list-style-type: none;
+.blue-font {
+    color: #417690;
+    cursor: pointer;
 }
 
-.container {
-    padding: 15px;
+.red-font {
+    color: #cc3300;
 }
 
-.navbar-nav {
-    list-style-type: none;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+.blue-font:hover {
+    color: #cc3300;
+    cursor: pointer;
+    text-decoration: none;
 }
 
-.nav-item {
-    padding-left: 15px;
-    height: 100%;
+/***************************************
+ * icons
+ ***************************************/
+
+.icon {
+    font-size: 18px;
 }
+
+
+/***************************************
+ * HEADER
+ ***************************************/
+
+.nav-height {
+    height: 45px;
+}
+
+.top-header {
+    background-color: #2f6982;
+}
+
 .nav-link, .navbar-brand {
-    color: #efefef !important;
+    color: white !important;
+    font-size: 13px;
 }
 
-.nav-button {
-    border-radius: 20px;
-    border: 1px solid rgba(240,255,255,.5);
-    color: #efefef;
-    font-size: 15px;
+.navbar-logo {
+    width: 55px;
 }
 
-.nav-button:hover {
-    border-radius: 20px;
-    border: 1px solid rgba(0, 246, 226, 0.5);
-    color: rgba(0, 246, 226, 0.5) !important;
+.header-account-img {
+    width: 35px;
 }
 
-.form-control {
-    border-radius: 10px 0 0 10px;
+.search-input {
+    height: 30px;
 }
 
-.search-button {
-    border-radius: 0px 10px 10px 0;
+.search-btn {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+
+/***************************************
+ * LOGIN/REGISTER
+ ***************************************/
 
 .center-box {
     display: flex;
@@ -59,37 +81,49 @@ ul {
     align-items: center;
 }
 
-legend {
-    font-size: 18px;
-    padding-bottom: 15px;
+
+/***************************************
+ * HOME
+ ***************************************/
+
+.post-img {
+    width: 250px;
+    height: 137px;
+    padding-right: 20px;
+    object-fit: cover;
 }
 
-.btn-outline-info {
-    transform: scale(1.2);
+.blog-user-img{
+    width: 50px;
+    border: 2px solid white;
 }
 
-.textinput, .emailinput {
-    border-radius: 25px;
+.article-metadata a {
+    margin-left: 15px;
 }
 
-.help-block, .alert-danger, .alert-block {
-    color: #a30000;
-    font-size: 12px;
-    padding-right: 10px;
+/***************************************
+ * MIKROBLOG
+ ***************************************/
+
+.micro-post-img{
+    width:   30vw;
 }
 
-.content-section {
-    width: 40%;
-    margin: 0 auto;
-}
-.side-section {
-    font-size: 13px;
-    padding: 5px 10px;
+
+/***************************************
+ * POST DETAILS
+ ***************************************/
+
+.post-details-img {
+    height: 355px;
+    padding-right: 20px;
+    object-fit: cover;
 }
 
-.small-account-img {
-    width: 35px;
-}
+/***************************************
+ * PROFILE
+ ***************************************/
 
 .avatar-img-div {
     position: relative;
@@ -109,7 +143,7 @@ legend {
 }
 
 .account-img {
-    width: 150px;
+    width:150px;
     margin-top: -100px;
     border: 2px solid white;
 }
@@ -122,21 +156,7 @@ legend {
 
 .background-img-div {
     position: relative;
-}
-
-.text {
-    position:absolute;
-    width: 100%;
-    height: 250px;
-    visibility:hidden;
     text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-color: rgba(0,0,0,.2);
-    color: white;
-    font-weight: bold;
 }
 
 .background-img-div:hover .text  {
@@ -146,7 +166,6 @@ legend {
 
 .username {
     color: deeppink;
-    padding-right: 10px;
     font-size: 25px;
 }
 
@@ -154,34 +173,16 @@ legend {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: center;
 }
 
 .profile-label{
-    width: 70px;
+    width: 150px;
+    padding: 5px 20px;
 }
 
 .bg-light {
-    padding: 15px;
-}
-
-.bottom-box {
-    display: flex;
-    flex-direction: row;
-}
-
-.first-row {
-    width: 70%;
-}
-
-.second-row {
-    width: 30%;
-    margin-left: 10px;
-}
-
-.icon {
-   font-size: 25px;
-   cursor: pointer;
+    padding: 10px;
 }
 
 .edit-profile-icon {
@@ -190,22 +191,31 @@ legend {
     align-items: center;
 }
 
-.blue-font {
-    color: #417690;
-    cursor: pointer;
-}
-.media {
-    padding-bottom: 10px;
+.edit-profile-icon i{
+  padding: 0 5px;
 }
 
-.post-img {
-    width: 200px;
-    padding-right: 20px;
+.border-line {
+    border: 3px solid gainsboro;
 }
 
-@media (max-width: 768px) {
 
-    .content-section {
-    width: 80%;
+/***************************************
+ * SIDE BOX
+ ***************************************/
+
+
+.side-box {
+    display: flex;
 }
+
+.side-box div{
+    height: 50px;
 }
+
+.side-post-img{
+    width: 115px;
+    height: 65px;
+    object-fit: cover;
+}
+
