@@ -2,31 +2,32 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-9 col-md-12 mt-2">
-            <div class="microPost-form mb-2">
-                <form class="bg-light p-2 row">
-                    <div>
-                        <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
-                    </div>
-                    <div class="col">
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        <div class="col-12 d-flex justify-content-between mt-2 p-0">
-                            <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item">B</li>
-                                <li class="list-group-item">I</li>
-                                <li class="list-group-item">"</li>
-                                <li class="list-group-item">link</li>
-                                <li class="list-group-item"> <\></li>
-                                <li class="list-group-item">spoil</li>
-                                <li class="list-group-item">( ͡° ͜ʖ ͡°)</li>
-                                <li class="list-group-item">img</li>
-                                <li class="list-group-item">ankieta</li>
-                            </ul>
-                            <button type="submit" class="btn btn-primary">Dodaj</button>
+            {% if user.is_authenticated %}
+                <div class="microPost-form mb-2">
+                    <form class="bg-light p-2 row">
+                        <div>
+                            <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                         </div>
-                    </div>
-
-                </form>
-            </div>
+                        <div class="col">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <div class="col-12 d-flex justify-content-between mt-2 p-0">
+                                <ul class="list-group list-group-horizontal">
+                                    <li class="list-group-item">B</li>
+                                    <li class="list-group-item">I</li>
+                                    <li class="list-group-item">"</li>
+                                    <li class="list-group-item">link</li>
+                                    <li class="list-group-item"> <\></li>
+                                    <li class="list-group-item">spoil</li>
+                                    <li class="list-group-item">( ͡° ͜ʖ ͡°)</li>
+                                    <li class="list-group-item">img</li>
+                                    <li class="list-group-item">ankieta</li>
+                                </ul>
+                                <button type="submit" class="btn btn-primary">Dodaj</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
             {% for post in posts %}
                 <article class="media bg-light p-2 row mb-2">
                     <div>

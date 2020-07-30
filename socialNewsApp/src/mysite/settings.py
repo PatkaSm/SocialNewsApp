@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'blog',
     'tag',
     'mikroblog',
+    'likes',
 ]
 
 AUTH_USER_MODEL = 'user.User'

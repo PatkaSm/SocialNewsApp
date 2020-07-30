@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.db.models import Count, Q
 from django.views.generic import ListView, DetailView
-from tag.models import Tag
+from likes.models import Reaction
 
 from .models import Post
 
@@ -18,8 +18,9 @@ class PostDetailView(DetailView):
     context_object_name = 'post'
 
 
-class HitsPostListView(ListView):
+class HitsListView(ListView):
     model = Post
     template_name = 'blog/hits.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']
+    queryset = Post.objects.all().annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
