@@ -17,7 +17,7 @@
                                 <a class="nav-link" href="#">Nowe <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Hity</a>
+                                <a class="nav-link" href="{% url 'hity' %}">Hity</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'mikroblog' %}">Mikroblog</a>
@@ -30,13 +30,13 @@
                         </ul>
                         <form class="form-inline my-2 my-lg-0">
                             <input class="form-control mr-sm-2 search-input" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-light search-btn" type="submit">Search</button>
+                            <button class="btn btn-outline-light search-btn mr-2" type="submit">Search</button>
                         </form>
-                        <div class="nav-item">
-                            <a class="nav-link" href="#">Dodaj</a>
+                        <div class="nav-item ">
+                            <a class="nav-link pl-0" href="#">Dodaj</a>
                         </div>
                         <div class="nav-item">
-                            <a class="nav-link" href="#">Wiadomości</a>
+                            <a class="nav-link pl-0" href="#">Wiadomości</a>
                         </div>
                         <div class="navbar-nav nav-item dropdown">
                             {% if user.is_authenticated %}

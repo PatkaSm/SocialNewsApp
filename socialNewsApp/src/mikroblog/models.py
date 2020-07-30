@@ -14,6 +14,3 @@ class MicroPost(models.Model):
     tag = models.ManyToManyField(Tag)
     date_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(blank=True, max_length=None, default='user.png', upload_to=upload_location)
-
-    def __str__(self):
-        return self.author

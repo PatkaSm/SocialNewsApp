@@ -1,0 +1,26 @@
+    <div class="mr-2">
+        <img src="{{ user.avatar.url }}" alt="avatar" class="comment-owner-img">
+    </div>
+    <div class="col-10 p-0 ml-3">
+        <div class="row comment-bottom-border pb-1">
+            <div class="col p-0 ">
+                <a href="{% url 'profile' pk=user.id %}"><span class="blue-font">@{{ user.username }}</span></a>
+                <small class="text-muted"> 1 godz. temu</small>
+            </div>
+            <div class="col d-flex justify-content-end">
+                <i class="icon icon-thumbs-up green-font">212</i>
+                <i class="icon icon-thumbs-down red-font">5</i>
+            </div>
+        </div>
+        <div class="row pt-2">
+            <div class="col-12 p-0">
+                treść komentarza
+            </div>
+            <!-- tu jeszcze warunek if zdjęcie -->
+            <div class="col-12 p-0 bt-2">
+                <img src="{{ user.avatar.url }}" alt="zdjecie" class="comment-img">
+            </div>
+            <small class="text-muted">Źródło: </small>
+            <!-- endif -->
+        </div>
+    </div>

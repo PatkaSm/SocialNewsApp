@@ -17,3 +17,9 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_details.html'
     context_object_name = 'post'
 
+
+class HitsPostListView(ListView):
+    model = Post
+    template_name = 'blog/hits.html'
+    context_object_name = 'posts'
+    ordering = ['-date_posted']

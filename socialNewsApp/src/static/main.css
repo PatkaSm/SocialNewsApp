@@ -1,6 +1,7 @@
 body {
     background-color: gainsboro;
 }
+
 /***************************************
  * FONTS
  ***************************************/
@@ -9,9 +10,22 @@ body {
     color: white;
 }
 
+.grey-font {
+    color: #686868;
+    cursor: pointer;
+}
+
+.grey-font:hover {
+    color: #363636;
+}
+
 .blue-font {
     color: #417690;
     cursor: pointer;
+}
+
+.green-font {
+    color: #19865C;
 }
 
 .red-font {
@@ -19,17 +33,22 @@ body {
 }
 
 .blue-font:hover {
-    color: #cc3300;
+    color: #e04813;
     cursor: pointer;
     text-decoration: none;
 }
 
+.mini-font {
+    color: #4c4c4c;
+    font-size: 12px;
+}
+
+
 /***************************************
  * icons
  ***************************************/
-
 .icon {
-    font-size: 18px;
+    cursor: pointer;
 }
 
 
@@ -47,7 +66,7 @@ body {
 
 .nav-link, .navbar-brand {
     color: white !important;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .navbar-logo {
@@ -77,7 +96,6 @@ body {
 .center-box {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
@@ -107,7 +125,7 @@ body {
  ***************************************/
 
 .micro-post-img{
-    width:   30vw;
+    width: 500px;
 }
 
 
@@ -116,18 +134,56 @@ body {
  ***************************************/
 
 .post-details-img {
-    height: 355px;
-    padding-right: 20px;
     object-fit: cover;
+    width: 100%;
+}
+
+
+/***************************************
+ * COMMENTS
+ ***************************************/
+.comment-owner-img {
+    width: 55px;
+}
+
+.comment-bottom-border {
+    border-bottom: 1px solid gainsboro;
+}
+
+.comment-img {
+    width: 80%;
+}
+
+.comment-sort-box {
+    cursor: pointer;
+}
+
+.comment-sort-box:hover {
+    background-color: #eaeaea;
 }
 
 /***************************************
  * PROFILE
  ***************************************/
+.username {
+    color: deeppink;
+    font-size: 25px;
+}
+
+.edit-profile-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-profile-icon i{
+  padding: 0 5px;
+}
 
 .avatar-img-div {
     position: relative;
-
+    display: flex;
+    justify-content: center;
 }
 
 .edit-avatar {
@@ -154,68 +210,68 @@ body {
     width: 100%;
 }
 
+.background-text {
+    position:absolute;
+    width: 100%;
+    height: 250px;
+    visibility:hidden;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: rgba(0,0,0,.2);
+    color: white;
+    font-weight: bold;
+}
+
 .background-img-div {
     position: relative;
     text-align: center;
 }
 
-.background-img-div:hover .text  {
+.background-img-div:hover .background-text  {
     visibility:visible;
     border: 1px dashed white;
 }
 
-.username {
-    color: deeppink;
-    font-size: 25px;
-}
-
 .profile-box {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid gainsboro;
 }
 
-.profile-label{
-    width: 150px;
-    padding: 5px 20px;
+.profile-activity-box-border {
+    border-right: 1px solid gainsboro;
+    border-left: 1px solid gainsboro;
 }
-
-.bg-light {
-    padding: 10px;
-}
-
-.edit-profile-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.edit-profile-icon i{
-  padding: 0 5px;
-}
-
-.border-line {
-    border: 3px solid gainsboro;
-}
-
 
 /***************************************
  * SIDE BOX
  ***************************************/
 
-
-.side-box {
-    display: flex;
+.border-line {
+    border: 3px solid gainsboro;
 }
 
-.side-box div{
-    height: 50px;
-}
-
-.side-post-img{
-    width: 115px;
-    height: 65px;
+.side-box-post-img {
+    width: 100%;
+    height: 60px;
     object-fit: cover;
+}
+
+.side-box-post-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.side-box-border {
+    border-bottom: 1px solid gainsboro;
+    padding: 8px;
+}
+/***ukrywa side-section przy niższej rozdzielce***/
+@media (max-width: 990px) {
+  .side-section {
+      display: none;
+  }
 }
 

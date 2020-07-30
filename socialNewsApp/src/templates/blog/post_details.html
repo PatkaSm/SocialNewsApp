@@ -1,77 +1,124 @@
 {% extends "blog/base.html" %}
 {% block content %}
     {% load humanize %}
-    <div class="row">
-        <div class="col-lg-9 col-md-12">
-           <article class="media bg-light row">
-                        <div class="col-3 col-sm-2 col-md-1 col-lg-1 center-box">
-                            <span>123</span>
-                            <button class="btn btn-dark"><small>Podbij</small></button>
+    <div class="row mt-2">
+        <div class="col-md-12 col-lg-9">
+            <article class="bg-light row pt-2  d-flex justify-content-center">
+                <div class="pr-1 mb-2 col-12 col-sm-2 col-md-1 center-box">
+                    <span>123</span>
+                    <button class="btn btn-dark"><small>Podbij</small></button>
+                </div>
+                <div class="col-12 col-sm-11">
+                    <div class="row">
+                        <div class="col-12 col-md-6 ">
+                            <img class="post-details-img mb-2" src="{{ post.image.url }}" alt="Zdjecie">
                         </div>
-                      <img class="post-details-img col-12 col-sm-12 col-md-5" src="{{ post.image.url }}" alt="Zdjecie">
-                      <div class="media-body col-12 col-sm-12 col-md-7 col-lg-8">
-                        <div class="article-top-box">
-                          <h5><a href="{{ post.link }}" target="_blank"> {{ post.title }}</a></h5>
-                          <small><a class="blue-font" href="#">{{ post.author }}</a></small>
-                            {% for tag in post.tag.all %}
-                                <small class="text-muted"> <a href="#">#{{ tag.word }} </a> </small>
-                            {% endfor %}
-                        </div>
-                      <div class="content">
-                        <small>{{ post.content}}</small>
-                      </div>
-                      <div>
-                        <small class="text-muted">
-                            <i class="icon icon-star"> Ulubione</i>
-                            <i class="icon icon-lock"> Zgłoś</i>
-                        </small>
-                      </div>
+                        <div class="col-12 col-md-6">
+                            <div class="article-top-box">
+                            <span><a href="{{ post.link }}" target="_blank"
+                                     class="blue-font"> {{ post.title }}</a></span>
+                                <div>
+                                    <small><a class="blue-font" href="#">{{ post.author }}</a></small>
+                                    {% for tag in post.tag.all %}
+                                        <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
+                                    {% endfor %}
+                                </div>
 
-                      </div>
-           </article>
+                            </div>
+                            <div class="content">
+                                <small>{{ post.content }}</small>
+                            </div>
+                            <div>
+                                <small>
+                                    <i class="icon-star grey-font"> Ulubione</i>
+                                    <i class="icon-lock grey-font"> Zgłoś</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <div class=" bg-light mt-2 row pl-4">
+                <span class="p-2">Komentarze(1): </span>
+                <div class="col-12 col-sm-8 col-md-5 d-flex justify-content-between">
+                    <div class="comment-sort-box p-2">Najstarsze</div>
+                    <div class="comment-sort-box p-2">Najnowsze</div>
+                    <div class="comment-sort-box p-2">Najlepsze</div>
+                </div>
+
+            </div>
+            <div class=" bg-light mt-2 row p-2">
+                {% include 'blog/post_comments.html' %}
+            </div>
         </div>
-        <div class="col-md-3 side-section">
-            <div class="post-user-info bg-light">
+        <div class="col-md-3 side-section ">
+            <div class="post-user-info bg-light p-2 mb-2">
                 <div class="mb-2">
-                    Dodany: <span class="font-weight-bold mb-2">{{ post.date_posted|naturaltime }}</span>  przez:
+                    <small> Dodany <span class="font-weight-bold"> {{ post.date_posted|naturaltime }} </span>
+                        przez:</small>
                 </div>
-                <img src="{{ post.author.avatar.url }}" class="small-account-img" alt="Avatar">
-                <a class="blue-font font-weight-bold" href="#">{{ post.author }}</a>
-                <div class="row mt-2">
-                    <small class="col-4 justify-content-center">Wykopali: 123</small>
-                    <small class="col-4 justify-content-center">Zakopali: 4</small>
-                    <small class="col-4 justify-content-center">12 wyświetleń</small>
+                <img src="{{ post.author.avatar.url }}" class="header-account-img" alt="Avatar">
+                <a class="blue-font font-weight-bold" href="{% url 'profile' pk=post.author.id %}">{{ post.author }}</a>
+                <ul class="list-group mt-2">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Wykopali:
+                        <span class="badge badge-success badge-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Zakopali:
+                        <span class="badge badge-danger badge-pill">2</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Wyświetlono:
+                        <span class="badge badge-dark badge-pill">1</span>
+                    </li>
+                </ul>
+            </div>
+            <p class="list-group-item list-group-item-light m-0">Podobne posty</p>
+            <div class="list-group-item-light mb-1">
+                <div class="side-box-post p-2">
+                    <img src="{{ post.image.url }}" class="side-box-post-img" alt="post-img">
+                    <div class="side-box-post-text">
+                        <small class="blue-font">{{ post.title }}</small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">123</i>
+                        </small>
+                    </div>
                 </div>
             </div>
-           <p class="list-group-item list-group-item-light">Podobne posty</p>
-           <div class="bg-light side-box">
-               <img src="{{ request.user.avatar.url }}" alt="Podobny post" class="side-post-img">
-               <div class="ml-2 font-weight-bold">
-                   <div class="blue-font"> Podobny post numer 1</div>
-                   <i class="icon-thumbs-up red-font"> 123</i>
-               </div>
-           </div>
-        </div>
-        <div class="col-12 col-md-12 col-lg-9 bg-light">
-            <div class="comment">
-                Komentarz
+            <div class="list-group-item-light mb-1">
+                <div class="side-box-post p-2">
+                    <img src="{{ post.image.url }}" class="side-box-post-img" alt="post-img">
+                    <div class="side-box-post-text">
+                        <small class="blue-font">{{ post.title }}</small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">123</i>
+                        </small>
+                    </div>
+                </div>
             </div>
-              <div class="comment">
-                Komentarz
+            <div class="list-group-item-light mb-1">
+                <div class="side-box-post p-2">
+                    <img src="{{ post.image.url }}" class="side-box-post-img" alt="post-img">
+                    <div class="side-box-post-text">
+                        <small class="blue-font">{{ post.title }}</small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">123</i>
+                        </small>
+                    </div>
+                </div>
             </div>
-              <div class="comment">
-                Komentarz
+            <div class="list-group-item-light mb-1">
+                <div class="side-box-post p-2">
+                    <img src="{{ post.image.url }}" class="side-box-post-img" alt="post-img">
+                    <div class="side-box-post-text">
+                        <small class="blue-font">{{ post.title }}</small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">123</i>
+                        </small>
+                    </div>
+                </div>
             </div>
-              <div class="comment">
-                Komentarz
-            </div>
-              <div class="comment">
-                Komentarz
-            </div>
-              <div class="comment">
-                Komentarz
-            </div>
-
         </div>
     </div>
 {% endblock %}

@@ -1,44 +1,151 @@
 {% extends "blog/base.html" %}
 {% block content %}
     <div class="row">
-        <div class="col-lg-9 col-md-12">
-            {% if posts %}
-                {% for post in posts %}
-                    <article class="media bg-light container-fluid">
-                        <div>
-                            <img class="blog-user-img" src="{{ request.user.avatar.url }}" alt="avatar">
+        <div class="col-lg-9 col-md-12 mt-2">
+            <div class="microPost-form mb-2">
+                <form class="bg-light p-2 row">
+                    <div>
+                        <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
+                    </div>
+                    <div class="col">
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <div class="col-12 d-flex justify-content-between mt-2 p-0">
+                            <ul class="list-group list-group-horizontal">
+                                <li class="list-group-item">B</li>
+                                <li class="list-group-item">I</li>
+                                <li class="list-group-item">"</li>
+                                <li class="list-group-item">link</li>
+                                <li class="list-group-item"> <\></li>
+                                <li class="list-group-item">spoil</li>
+                                <li class="list-group-item">( ͡° ͜ʖ ͡°)</li>
+                                <li class="list-group-item">img</li>
+                                <li class="list-group-item">ankieta</li>
+                            </ul>
+                            <button type="submit" class="btn btn-primary">Dodaj</button>
                         </div>
-                        <div>
-                            <div class="article-metadata">
-                                <a href="{% url 'profile' pk=post.author.id %}">{{ post.author }}</a>
-                                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                                <i class="icon-plus-outline"></i>
-                            </div>
-                            {% if post.content %}
-                                <small class="m-3">{{ post.content}}</small>
-                            {% endif %}
-                            <div class="col-11">
-                                {% for tag in post.tag.all %}
-                                    <small class="text-muted"> <a href="#">#{{ tag.word }} </a> </small>
-                                {% endfor %}
-                            </div>
-                            <img class="col-12 col-md-12    " alt="Obrazek" src="{{ post.image.url }}">
-                            <small class="text-muted">Źródło: </small>
-                        </div>
-                    </article>
-                    {% endfor %}
-                {% else %}
-                    Nie ma żdanych wpisów, dodaj swój!
-            {% endif %}
-        </div>
-            <div class="side-section col-md-3">
-                <p class="list-group-item list-group-item-light">Ostatnio popularne</p>
-                  <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Bebebebe</li>
-                    <li class="list-group-item list-group-item-light">Nananana</li>
-                    <li class="list-group-item list-group-item-light">Tytytytty</li>
-                    <li class="list-group-item list-group-item-light">Nynynynyn</li>
-                  </ul>
+                    </div>
+
+                </form>
             </div>
+            {% for post in posts %}
+                <article class="media bg-light p-2 row mb-2">
+                    <div>
+                        <img class="comment-owner-img" src="{{ post.author.avatar.url }}" alt="avatar">
+                    </div>
+                    <div class="col p-0">
+                        <div class="article-metadata row">
+                            <div class="col-10">
+                                <a href="{% url 'profile' pk=post.author.id %}" class="blue-font">{{ post.author }}</a>
+                                <span class="text-muted mini-font">{{ post.date_posted|date:"F d, Y" }}</span>
+                            </div>
+                            <div class="col-2 d-flex justify-content-end">
+                                <i class="icon-plus-outline green-font">1231</i>
+                            </div>
+                        </div>
+                        {% if post.content %}
+                            <small class="m-3">{{ post.content }}</small>
+                        {% endif %}
+                        <div class="col-11">
+                            {% for tag in post.tag.all %}
+                                <small> <a href="#" class="red-font">#{{ tag.word }} </a> </small>
+                            {% endfor %}
+                        </div>
+                        <img class="col-12 col-md-12 micro-post-img" alt="Obrazek" src="{{ post.image.url }}">
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        <div class="side-section col-md-3 mt-2">
+            <div class="list-group">
+                <div class="list-group-item list-group-item-light mt-1">
+                    <span>Popularne tagi</span>
+                    <div class="text-muted">
+                        <a href="#" class="text-muted mini-font">#patologia</a>
+                        <a href="#" class="text-muted mini-font">#pis</a>
+                        <a href="#" class="text-muted mini-font">#polska</a>
+                        <a href="#" class="text-muted mini-font">#memeski</a>
+                        <a href="#" class="text-muted mini-font">#heheheszki</a>
+                        <a href="#" class="text-muted mini-font">#polityka</a>
+                        <a href="#" class="text-muted mini-font">#kononowicz</a>
+                        <a href="#" class="text-muted mini-font">#gownowpis</a>
+                        <a href="#" class="text-muted mini-font">#pracbaza</a>
+                    </div>
+                </div>
+                <div class="list-group-item list-group-item-light mt-2">
+                    <span>Gorące dyskusje</span>
+                </div>
+                <div class="bg-light">
+                    <div class="list-group-item-light">
+                        <div class="side-box-post p-2">
+                            <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                            <div class="side-box-post-text">
+                                <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
+                                    wirusie.</small>
+                                <small>
+                                    <i class="icon-thumbs-up red-font">123</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light">
+                    <div class="list-group-item-light">
+                        <div class="side-box-post p-2">
+                            <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                            <div class="side-box-post-text">
+                                <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
+                                    wirusie.</small>
+                                <small>
+                                    <i class="icon-thumbs-up red-font">123</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group-item list-group-item-light mt-2">
+                    Wykopalisko
+                </div>
+                <div class="bg-light">
+                    <div class="list-group-item-light">
+                        <div class="side-box-post p-2">
+                            <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                            <div class="side-box-post-text">
+                                <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
+                                    wirusie.</small>
+                                <small>
+                                    <i class="icon-thumbs-up red-font">123</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-light">
+                    <div class="list-group-item-light">
+                        <div class="side-box-post p-2">
+                            <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                            <div class="side-box-post-text">
+                                <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
+                                    wirusie.</small>
+                                <small>
+                                    <i class="icon-thumbs-up red-font">123</i>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item-light">
+                <div class="side-box-post p-2">
+                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                    <div class="side-box-post-text">
+                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
+                            wirusie.</small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">123</i>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}
