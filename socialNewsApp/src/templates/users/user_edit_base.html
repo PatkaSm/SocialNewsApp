@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_filters %}
+{% block content %}
+    <div class="profile-wrapper">
+        <div class="row no-gutters bg-light justify-content-center">
+            <ul class="nav edit-user">
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border" href="#">
+                        Ustawienia
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border {% if request.resolver_match.url_name == "profile-edit" %}active{% endif %}"
+                       href="{% url 'profile-edit' pk=user.id%}">
+                        Profil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border {% if request.resolver_match.url_name == "email-edit" %}active{% endif %}"
+                       href="{% url 'email-edit' pk=user.id%}">
+                        Email
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border {% if request.resolver_match.url_name == "password-edit" %}active{% endif %}"
+                       href="{% url 'password-edit' pk=user.id%}">
+                        Hasło
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border {% if request.resolver_match.url_name == "avatar-edit" %}active{% endif %}"
+                       href="{% url 'avatar-edit' pk=user.id%}">
+                        Avatar
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border {% if request.resolver_match.url_name == "background-edit" %}active{% endif %}"
+                       href="{% url 'background-edit' pk=user.id%}">
+                        Tło
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link grey-font btm-border" href="#">
+                        Czarne listy
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="forms">
+            {% block update_forms %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

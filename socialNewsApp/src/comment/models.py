@@ -1,13 +1,13 @@
 from django.db import models
-
 from blog.models import Post
+from mikroblog.models import MicroPost
 from user.models import User
 
 
 class Comment(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True)
-    microPost = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, related_name='comments', null=True)
+    microPost = models.ForeignKey(MicroPost, on_delete=models.CASCADE, blank=True, related_name='comments', null=True)
     content = models.TextField(max_length=500)
     date_added = models.DateField(auto_now=True)
-    parent = models.ForeignKey('self', blank=True, related_name='children', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='children', on_delete=models.CASCADE)

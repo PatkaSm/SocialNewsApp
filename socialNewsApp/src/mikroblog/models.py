@@ -9,7 +9,7 @@ def upload_location(instance, filename):
 
 
 class MicroPost(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='micro_posts')
     content = models.TextField(blank=True, max_length=1500)
     tag = models.ManyToManyField(Tag)
     date_posted = models.DateTimeField(default=timezone.now)

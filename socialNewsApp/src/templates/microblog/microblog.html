@@ -12,15 +12,15 @@
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             <div class="col-12 d-flex justify-content-between mt-2 p-0">
                                 <ul class="list-group list-group-horizontal">
-                                    <li class="list-group-item">B</li>
-                                    <li class="list-group-item">I</li>
-                                    <li class="list-group-item">"</li>
-                                    <li class="list-group-item">link</li>
-                                    <li class="list-group-item"> <\></li>
-                                    <li class="list-group-item">spoil</li>
-                                    <li class="list-group-item">( ͡° ͜ʖ ͡°)</li>
-                                    <li class="list-group-item">img</li>
-                                    <li class="list-group-item">ankieta</li>
+                                    <li class="list-group-item pointer-buttons">B</li>
+                                    <li class="list-group-item pointer-buttons">I</li>
+                                    <li class="list-group-item pointer-buttons">"</li>
+                                    <li class="list-group-item pointer-buttons">link</li>
+                                    <li class="list-group-item pointer-buttons"> <\></li>
+                                    <li class="list-group-item pointer-buttons">spoil</li>
+                                    <li class="list-group-item pointer-buttons">( ͡° ͜ʖ ͡°)</li>
+                                    <li class="list-group-item pointer-buttons">img</li>
+                                    <li class="list-group-item pointer-buttons">ankieta</li>
                                 </ul>
                                 <button type="submit" class="btn btn-primary">Dodaj</button>
                             </div>
@@ -48,7 +48,7 @@
                         {% endif %}
                         <div class="col-11">
                             {% for tag in post.tag.all %}
-                                <small> <a href="#" class="red-font">#{{ tag.word }} </a> </small>
+                                <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
                             {% endfor %}
                         </div>
                         <img class="col-12 col-md-12 micro-post-img" alt="Obrazek" src="{{ post.image.url }}">

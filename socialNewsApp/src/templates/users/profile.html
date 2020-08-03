@@ -16,9 +16,11 @@
                         <div class="edit-avatar"></div>
                     </div>
                     <div class="col">
-                        <span class="username"> {{ user.username }} </span>
+                        <span class="username"> {{ user.username }}</span>
                         {% if user.id == request.user.id %}
-                            <i class="icon icon-pencil"></i>
+                            <a href="{% url 'profile-edit' pk=user.id %}" class="blue-font">
+                                <i class="icon icon-pencil"></i>
+                            </a>
                         {% endif %}
                         <small> na wypoku od {{ user.date_joined|naturaltime }} </small>
                     </div>
@@ -59,15 +61,27 @@
                                 {{ user.bio }}
                             </div>
                         </div>
-                        <div class=" row justify-content-start profile-box">
-                            <div class="col-1">
-                                <i class="icon icon-instagram"></i>
+                        <div class=" row justify-content-start">
+                            <div class="p-2">
+                                {% if user.ig %}
+                                    <a href="{{ user.ig }}" target="_blank">
+                                        <i class="icon icon-instagram"></i>
+                                    </a>
+                                {% endif %}
                             </div>
-                            <div class="col-1">
-                                <i class="icon icon-twitter-circled"></i>
+                            <div class="p-2">
+                                {% if user.facebook %}
+                                    <a href="{{ user.facebook }}" target="_blank">
+                                        <i class="icon icon-facebook-squared"></i>
+                                    </a>
+                                {% endif %}
                             </div>
-                            <div class="col-1">
-                                <i class="icon icon-facebook-squared"></i>
+                            <div class="p-2">
+                                {% if user.twitter %}
+                                    <a href="{{ user.twitter }}" target="_blank">
+                                        <i class="icon icon-twitter-circled"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -76,9 +90,14 @@
                     <div class="bg-light col-12 col-md-9 border-line pt-3 text-center">
                         <span>Aktywności użytkownika</span>
                         <div class="row p-3">
-                            <div class="col-sm-12 col-md-4 box-item profile-activity-box">406 akcji</div>
-                            <div class="col-sm-12 col-md-4 box-item profile-activity-box-border">23 newsy</div>
-                            <div class="col-sm-12 col-md-4 box-item profile-activity-box">666 mikroblog</div>
+                            <div class="col-sm-12 col-md-4 box-item profile-activity-box">{{ user_reactions }} akcji
+                            </div>
+                            <div class="col-sm-12 col-md-4 box-item profile-activity-box-border">{{ user_posts }}
+                                posty
+                            </div>
+                            <div class="col-sm-12 col-md-4 box-item profile-activity-box">{{ user_micro_posts_reactions }}
+                                mikroblog
+                            </div>
                         </div>
                     </div>
 

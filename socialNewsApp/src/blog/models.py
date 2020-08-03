@@ -15,7 +15,7 @@ class Post(models.Model):
         TEXT = "txt", "Tekstowy"
 
     type = models.CharField(max_length=5, choices=Type.choices)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=100)
     content = models.TextField()
     tag = models.ManyToManyField(Tag)
