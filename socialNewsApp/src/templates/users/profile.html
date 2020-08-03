@@ -5,7 +5,9 @@
         <div class="row mt-1">
             <div class="col">
                 <div class="row background-img-div border-line">
+                <a href="{% url 'background-edit' pk=user.id %}">
                     <span class="background-text"> Zmień swoje zdjęcie w tle!</span>
+                </a>
                     {% if user.background.url != None %}
                         <img class="background-img" src="{{ user.background.url }}" alt="avatar">
                     {% endif %}

@@ -1,9 +1,6 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, DetailView, CreateView
 from user.forms import UserRegisterForm
@@ -42,7 +39,8 @@ class UserDetailsView(DetailView):
             'user_micro_posts_reactions': user_micro_posts_reactions,
             'user_micro_posts': user_micro_posts,
             'user_post_reactions': user_posts_reactions,
-            'user_reactions': user_posts + user_posts_reactions + user_micro_posts_reactions + user_comments + user_micro_posts
+            'user_reactions': user_posts + user_posts_reactions + user_micro_posts_reactions + user_comments +
+                              user_micro_posts
         }
         return context
 
@@ -87,6 +85,7 @@ class BackgroundUpdate(UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "Pomyślnie zmieniono zdjęcie w tle!")
         super().form_valid(form)
+        print(form.cleaned_data)
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -104,8 +103,7 @@ class EmailUpdate(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
-    template_name = 'users/password_update.html'
+class ChangePasswordView(PasswordChangeView):
     success_url = reverse_lazy('profile:password_change_done')
 
     def form_valid(self, form):
@@ -114,8 +112,5 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ChangePasswordDoneView(LoginRequiredMixin, PasswordChangeDoneView):
+class ChangePasswordDoneView(PasswordChangeDoneView):
     template_name = 'users/password_update_success.html'
-
-
-

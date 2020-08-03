@@ -3,7 +3,7 @@
 {% block update_forms %}
     <div class="row no-gutters justify-content-center bg-light mt-1 p-2">
         <div class="col-10 col-sm-9 col-md-7">
-            <form method="post">{% csrf_token %}
+            <form method="post" enctype="multipart/form-data" >{% csrf_token %}
                 {{ form|crispy }}
                 <div class="form-group center-box">
                     <button class="btn btn-outline-info" type="submit">Zapisz</button>

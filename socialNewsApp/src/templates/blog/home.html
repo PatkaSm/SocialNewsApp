@@ -6,7 +6,7 @@
                 {% for post in posts %}
                     <article class="media bg-light mb-2 p-3 row">
                         <div class="col-3 col-sm-2 col-md-1 col-lg-1 center-box">
-                            <span>123</span>
+                            <span>{{ post.likes }}</span>
                             <button class="btn btn-dark"><small>Podbij</small></button>
                         </div>
                         <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image.url }}"

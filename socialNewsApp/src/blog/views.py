@@ -10,12 +10,28 @@ class PostListView(ListView):
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
+    queryset = Post.objects.all().annotate(likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)))
 
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_details.html'
-    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        post_data = kwargs['object']
+        post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
+        post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
+        similar_posts = Post.objects.annotate(
+            likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).filter(
+            tag__in=post_data.tag.all()).exclude(id=post_data.id).distinct().order_by('-likes')[:6]
+
+        context = {
+            'post': post_data,
+            'post_up_vote': post_reactions_upvote,
+            'post_down_vote': post_reactions_down_vote,
+            'similar_posts': similar_posts,
+        }
+        return context
 
 
 class HitsListView(ListView):
@@ -23,4 +39,4 @@ class HitsListView(ListView):
     template_name = 'blog/hits.html'
     context_object_name = 'posts'
     queryset = Post.objects.all().annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
+        likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
