@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
@@ -9,17 +10,19 @@ from user.forms import UserRegisterForm
 from user.models import User
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f' {username} Twoje konto zostało założone! Możesz się teraz zalogować')
-            return redirect('login')
-    else:
-        form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+class CreateUser(CreateView):
+    model = User
+    form_class = UserRegisterForm
+    template_name = 'users/register.html'
+
+    def get_success_url(self):
+        return reverse('login')
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        messages.success(self.request, f' {username} Twoje konto zostało założone! Możesz się teraz zalogować')
+        super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class UserDetailsView(DetailView):
