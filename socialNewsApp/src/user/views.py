@@ -34,6 +34,7 @@ class UserDetailsView(DetailView):
         user_posts_reactions = user_data.reactions.filter(micro_post=None).count()
         user_micro_posts = user_data.micro_posts.all().count()
         context = {
+            'user': user_data,
             'user_posts': user_posts,
             'user_comments': user_comments,
             'user_micro_posts_reactions': user_micro_posts_reactions,

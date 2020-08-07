@@ -1,26 +1,34 @@
-    <div class="mr-2">
-        <img src="{{ user.avatar.url }}" alt="avatar" class="comment-owner-img">
+{% load humanize %}
+<div class="row mt-1 bg-light pt-2">
+    <div class="col-1 mr-2">
+        <a href="{% url 'profile' pk=comment.owner.id %}">
+            <img src="{{ comment.owner.avatar.url }}" alt="avatar" class="comment-owner-img">
+        </a>
     </div>
     <div class="col-10 p-0 ml-3">
         <div class="row comment-bottom-border pb-1">
             <div class="col p-0 ">
-                <a href="{% url 'profile' pk=user.id %}"><span class="blue-font">@{{ user.username }}</span></a>
-                <small class="text-muted"> 1 godz. temu</small>
+                <a href="{% url 'profile' pk=comment.owner.id %}"><span
+                        class="blue-font small">@{{ comment.owner.username }}</span></a>
+                <small class="text-muted"> {{ comment.date_added|naturaltime }}</small>
             </div>
             <div class="col d-flex justify-content-end">
-                <i class="icon icon-thumbs-up green-font">212</i>
-                <i class="icon icon-thumbs-down red-font">5</i>
+                <i class="icon icon-thumbs-up green-font">{{ comment.likes }}</i>
+                <i class="icon icon-thumbs-down red-font">{{ comment.dislikes }}</i>
             </div>
         </div>
         <div class="row pt-2">
-            <div class="col-12 p-0">
-                treść komentarza
+            <div class="col-12 p-0 pb-3">
+                {{ comment.content }}
             </div>
             <!-- tu jeszcze warunek if zdjęcie -->
-            <div class="col-12 p-0 bt-2">
-                <img src="{{ user.avatar.url }}" alt="zdjecie" class="comment-img">
-            </div>
-            <small class="text-muted">Źródło: </small>
+            {% if comment.img %}
+                <div class="col-12 p-0 bt-2">
+                    <img src="{{ comment.owner.avatar.url }}" alt="zdjecie" class="comment-img">
+                </div>
+                <small class="text-muted">Źródło: </small>
+            {% endif %}
             <!-- endif -->
         </div>
     </div>
+</div>

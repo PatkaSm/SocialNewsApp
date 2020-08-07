@@ -3,7 +3,7 @@ from django.contrib.auth import views as auth_views
 from user.views import UserUpdate, UserDetailsView, EmailUpdate, AvatarUpdate, BackgroundUpdate, ChangePasswordDoneView
 
 urlpatterns = [
-    path('<int:pk>', UserDetailsView.as_view(), name='profile'),
+    path('<int:pk>/', UserDetailsView.as_view(), name='profile'),
     path('<int:pk>/edycja', UserUpdate.as_view(), name='profile-edit'),
     path('<int:pk>/edycja/email', EmailUpdate.as_view(), name='email-edit'),
     path('<int:pk>/edycja/haslo',

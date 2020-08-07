@@ -1,3 +1,4 @@
+from comment.models import Comment
 from django.db.models import Count, Q
 from django.views.generic import ListView, DetailView
 from likes.models import Reaction
@@ -24,12 +25,17 @@ class PostDetailView(DetailView):
         similar_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).filter(
             tag__in=post_data.tag.all()).exclude(id=post_data.id).distinct().order_by('-likes')[:6]
+        post_comments = Comment.objects.filter(post=post_data).annotate(
+            likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
+            dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
+        )
 
         context = {
             'post': post_data,
             'post_up_vote': post_reactions_upvote,
             'post_down_vote': post_reactions_down_vote,
             'similar_posts': similar_posts,
+            'post_comments': post_comments
         }
         return context
 
