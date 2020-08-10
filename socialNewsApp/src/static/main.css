@@ -118,7 +118,7 @@ body {
     object-fit: cover;
 }
 
-.blog-user-img{
+.blog-user-img {
     width: 50px;
     border: 2px solid white;
 }
@@ -131,7 +131,7 @@ body {
  * MIKROBLOG
  ***************************************/
 
-.micro-post-img{
+.micro-post-img {
     width: 500px;
 }
 
@@ -168,6 +168,18 @@ body {
     background-color: #eaeaea;
 }
 
+.comment-form input[type="file"]{
+    display: none;
+}
+
+.comment-form textarea{
+    height: 150px;
+}
+
+.custom-file-upload {
+    cursor: pointer;
+}
+
 /***************************************
  * PROFILE
  ***************************************/
@@ -182,8 +194,8 @@ body {
     align-items: center;
 }
 
-.edit-profile-icon i{
-  padding: 0 5px;
+.edit-profile-icon i {
+    padding: 0 5px;
 }
 
 .avatar-img-div {
@@ -205,7 +217,7 @@ body {
 }
 
 .account-img {
-    width:150px;
+    width: 150px;
     margin-top: -100px;
     border: 2px solid white;
 }
@@ -217,16 +229,16 @@ body {
 }
 
 .background-text {
-    position:absolute;
+    position: absolute;
     width: 100%;
     height: 250px;
-    visibility:hidden;
+    visibility: hidden;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    background-color: rgba(0,0,0,.2);
+    background-color: rgba(0, 0, 0, .2);
     color: white;
     font-weight: bold;
 }
@@ -236,8 +248,8 @@ body {
     text-align: center;
 }
 
-.background-img-div:hover .background-text  {
-    visibility:visible;
+.background-img-div:hover .background-text {
+    visibility: visible;
     border: 1px dashed white;
 }
 
@@ -289,10 +301,15 @@ body {
     padding: 8px;
 }
 
+.side-box-comment-img {
+    width: 40%;
+
+}
+
 /***ukrywa side-section przy niższej rozdzielce***/
 @media (max-width: 990px) {
-  .side-section {
-      display: none;
-  }
+    .side-section {
+        display: none;
+    }
 }
 

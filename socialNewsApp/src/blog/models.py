@@ -18,7 +18,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=100)
     content = models.TextField()
-    tag = models.ManyToManyField(Tag)
+    tag = models.ManyToManyField(Tag, related_name='posts')
     date_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(blank=True, max_length=None, default='user.png', upload_to=upload_location)
     link = models.URLField(blank=True)

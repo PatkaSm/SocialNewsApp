@@ -1,11 +1,11 @@
 {% load humanize %}
-<div class="row mt-1 bg-light pt-2">
-    <div class="col-1 mr-2">
+<div class="row mt-1 bg-light pt-2 pl-2 pr-2">
+    <div class="mr-2">
         <a href="{% url 'profile' pk=comment.owner.id %}">
             <img src="{{ comment.owner.avatar.url }}" alt="avatar" class="comment-owner-img">
         </a>
     </div>
-    <div class="col-10 p-0 ml-3">
+    <div class="col p-0 ml-3">
         <div class="row comment-bottom-border pb-1">
             <div class="col p-0 ">
                 <a href="{% url 'profile' pk=comment.owner.id %}"><span
@@ -24,9 +24,8 @@
             <!-- tu jeszcze warunek if zdjęcie -->
             {% if comment.img %}
                 <div class="col-12 p-0 bt-2">
-                    <img src="{{ comment.owner.avatar.url }}" alt="zdjecie" class="comment-img">
+                    <img src="{{ comment.img.url }}" alt="zdjecie" class="comment-img">
                 </div>
-                <small class="text-muted">Źródło: </small>
             {% endif %}
             <!-- endif -->
         </div>

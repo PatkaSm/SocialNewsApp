@@ -39,7 +39,7 @@
                 </div>
             </article>
             <div class=" bg-light mt-1 mb-0 row pl-4">
-                <span class="p-2">Komentarze(1): </span>
+                <span class="p-2">Komentarze({{ comments }}): </span>
                 <div class="col-12 col-sm-8 col-md-5 d-flex justify-content-between">
                     <div class="pointer-buttons p-2">Najstarsze</div>
                     <div class="pointer-buttons p-2">Najnowsze</div>
@@ -54,12 +54,14 @@
                 </div>
             </div>
             {% if user.is_authenticated %}
-                <form class="bg-light p-2 row mt-1">
+                <form class="bg-light p-2 row mt-1" method="POST" enctype="multipart/form-data">
                     <div>
                         <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                     </div>
-                    <div class="col">
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <div class="col comment-form">
+                        {% csrf_token %}
+                        {{ comment_form.non_field_errors }}
+                        {{ comment_form.content }}
                         <div class="col-12 d-flex justify-content-between mt-2 p-0">
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item pointer-buttons">B</li>
@@ -69,7 +71,13 @@
                                 <li class="list-group-item pointer-buttons"> <\></li>
                                 <li class="list-group-item pointer-buttons">spoil</li>
                                 <li class="list-group-item pointer-buttons">( ͡° ͜ʖ ͡°)</li>
-                                <li class="list-group-item pointer-buttons">img</li>
+                                <li class="list-group-item pointer-buttons">
+                                    <label for="id_img" class="custom-file-upload">
+                                        img
+                                    </label>
+                                    {{ comment_form.img }}
+
+                                </li>
                                 <li class="list-group-item pointer-buttons">ankieta</li>
                             </ul>
                             <button type="submit" class="btn btn-primary">Dodaj</button>

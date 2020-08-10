@@ -29,60 +29,48 @@
             {% endif %}
         </div>
         <div class="side-section col-3 mt-2">
-            <p class="list-group-item list-group-item-light m-0">Ostatnio popularne</p>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
+            <div class="row">
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">Archiwum</p>
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+                           href="#" role="tab" aria-controls="home">2020</a>
+                        <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+                           href="#" role="tab" aria-controls="profile">2019</a>
                     </div>
                 </div>
             </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">
+                        <small>Najlepsze komentarze tego roku</small>
+                    </p>
+                    <div class="list-group">
+                        {% for comment in popular_comments %}
+                            <div class="list-group-item p-1 pr-2 pl-2 m-0">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <small class="blue-font">{{ comment.owner.username }}</small>
+                                        <small class="text-muted">3 days ago</small>
+                                    </div>
+                                    <i class="icon icon-thumbs-up green-font">{{ comment.likes }}</i>
+                                </div>
+                                <small class="mb-1">{{ comment.content }}</small>
+                                {% if comment.img %}
+                                    <div class="col-12 p-0 bt-2">
+                                        <a href="{% url 'post-detail' pk=comment.post.id %}">
+                                            <img src="{{ comment.img.url }}" alt="zdjecie" class="side-box-comment-img">
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
+            <div class="row mt-2">
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">Najlepsze wpisy tego roku</p>
                 </div>
             </div>
         </div>

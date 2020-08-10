@@ -31,59 +31,21 @@
         <div class="side-section col-3 mt-2">
             <p class="list-group-item list-group-item-light m-0">Ostatnio popularne</p>
             <div class="list-group-item-light mb-1">
+                {% for pop_post in popular_posts %}
                 <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
+                    <img src="{{ pop_post.image.url }}" class="side-box-post-img" alt="post-img">
                     <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
                         <small>
-                            <i class="icon-thumbs-up red-font">123</i>
+                            <a href="{% url 'post-detail' pk=pop_post.id %}" class="blue-font">
+                                {{ pop_post.title }}
+                            </a>
+                        </small>
+                        <small>
+                            <i class="icon-thumbs-up red-font">{{ pop_post.likes }}</i>
                         </small>
                     </div>
                 </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item-light mb-1">
-                <div class="side-box-post p-2">
-                    <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o wirusie.</small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">123</i>
-                        </small>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
