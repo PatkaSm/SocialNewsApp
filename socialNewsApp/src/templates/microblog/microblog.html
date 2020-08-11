@@ -4,12 +4,17 @@
         <div class="col-lg-9 col-md-12 mt-2">
             {% if user.is_authenticated %}
                 <div class="microPost-form mb-2">
-                    <form class="bg-light p-2 row">
+                    <form class="bg-light p-2 row" method="POST" enctype="multipart/form-data">
                         <div>
                             <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                         </div>
-                        <div class="col">
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <div class="col small-form">
+                            {% csrf_token %}
+                            {{ micro_post_form.non_field_errors }}
+                            {{ micro_post_form.content }}
+                            <small class="text-muted">Tagi(zapisuj je oddzielone przecinkiem: tag1,tag2,tag3...)</small>
+                            {{ micro_post_form.tag }}
+                            {{ micro_post_form.author }}
                             <div class="col-12 d-flex justify-content-between mt-2 p-0">
                                 <ul class="list-group list-group-horizontal">
                                     <li class="list-group-item pointer-buttons">B</li>
@@ -19,7 +24,12 @@
                                     <li class="list-group-item pointer-buttons"> <\></li>
                                     <li class="list-group-item pointer-buttons">spoil</li>
                                     <li class="list-group-item pointer-buttons">( ͡° ͜ʖ ͡°)</li>
-                                    <li class="list-group-item pointer-buttons">img</li>
+                                    <li class="list-group-item pointer-buttons">
+                                        <label for="id_image" class="custom-file-upload">
+                                            img
+                                        </label>
+                                        {{ micro_post_form.image }}
+                                    </li>
                                     <li class="list-group-item pointer-buttons">ankieta</li>
                                 </ul>
                                 <button type="submit" class="btn btn-primary">Dodaj</button>
@@ -51,7 +61,9 @@
                                 <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
                             {% endfor %}
                         </div>
-                        <img class="col-12 col-md-12 micro-post-img" alt="Obrazek" src="{{ post.image.url }}">
+                        {% if post.image %}
+                            <img class="col-12 col-md-12 micro-post-img" alt="Obrazek" src="{{ post.image.url }}">
+                        {% endif %}
                     </div>
                 </article>
             {% endfor %}
@@ -62,7 +74,7 @@
                     <span>Popularne tagi</span>
                     <div class="text-muted">
                         {% for tag in popular_tags %}
-                        <a href="#" class="text-muted mini-font">#{{ tag.word }}</a>
+                            <a href="#" class="text-muted mini-font">#{{ tag.word }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -72,19 +84,20 @@
                 <div class="bg-light">
                     <div class="list-group-item-light">
                         {% for side_post in popular_posts %}
-                        <div class="side-box-post p-2">
-                            <img src="{{ side_post.image.url }}" class="side-box-post-img" alt="post-img">
-                            <div class="side-box-post-text">
-                                <small class="blue-font">{{ side_post.content }}</small>
-                                <small>
-                                    <i class="icon-thumbs-up red-font">{{ side_post.likes }}</i>
-                                </small>
+                            <div class="side-box-post p-2">
+                                {% if side_post.image %}
+                                <img src="{{ side_post.image.url }}" class="side-box-post-img" alt="post-img">
+                                {% endif %}
+                                <div class="side-box-post-text">
+                                    <small class="blue-font">{{ side_post.content }}</small>
+                                    <small>
+                                        <i class="icon-thumbs-up red-font">{{ side_post.likes }}</i>
+                                    </small>
+                                </div>
                             </div>
-                        </div>
                         {% endfor %}
                     </div>
                 </div>
-
                 <div class="list-group-item list-group-item-light mt-2">
                     Wykopalisko
                 </div>
@@ -102,6 +115,6 @@
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
 {% endblock content %}

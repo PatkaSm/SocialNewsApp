@@ -1,4 +1,4 @@
-from blog.views import PostListView, PostDetailView, HitsListView
+from blog.views import PostListView, PostDetailView, HitsListView, NewPostsListView
 from django.urls import path
 from mikroblog.views import MicroPostListView
 
@@ -7,5 +7,6 @@ urlpatterns = [
     path('post/<int:pk>', PostDetailView.as_view(), name='post-detail'),
     path('mikroblog/', MicroPostListView.as_view(), name='mikroblog'),
     path('hity/', HitsListView.as_view(), name='hity'),
+    path('nowe/', NewPostsListView.as_view(), name='nowe'),
 
 ]

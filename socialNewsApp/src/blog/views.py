@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin
 from likes.models import Reaction
+from datetime import datetime, timedelta
+
 
 from .models import Post
 
@@ -35,7 +37,6 @@ class PostDetailView(DetailView, FormMixin):
 
     def get_context_data(self, **kwargs):
         post_data = kwargs['object']
-        print(post_data)
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -85,5 +86,22 @@ class HitsListView(ListView):
         context = {
             'posts': posts,
             'popular_comments': popular_comments
+        }
+        return context
+
+
+class NewPostsListView(ListView):
+    model = Post
+    template_name = 'blog/news.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, **kwargs):
+        posts = Post.objects.filter(date_posted__gte=datetime.now()-timedelta(days=1)).annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
+        popular_posts = posts.order_by('-likes')[:10]
+
+        context = {
+            'posts': posts,
+            'popular_posts': popular_posts
         }
         return context

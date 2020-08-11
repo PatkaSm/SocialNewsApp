@@ -13,4 +13,4 @@ class MicroPost(models.Model):
     content = models.TextField(blank=True, max_length=1500)
     tag = models.ManyToManyField(Tag, related_name='micro_posts')
     date_posted = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(blank=True, max_length=None, default='user.png', upload_to=upload_location)
+    image = models.ImageField(blank=True, null=True, default=None, upload_to=upload_location)

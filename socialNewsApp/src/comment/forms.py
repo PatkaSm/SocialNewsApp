@@ -11,5 +11,5 @@ class CommentForm(forms.ModelForm):
                 'class': 'form-control'
             }),
             'owner': forms.HiddenInput(),
-            'post': forms.HiddenInput()
+            'post': forms.HiddenInput(),
         }

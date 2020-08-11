@@ -168,11 +168,11 @@ body {
     background-color: #eaeaea;
 }
 
-.comment-form input[type="file"]{
+.small-form input[type="file"]{
     display: none;
 }
 
-.comment-form textarea{
+.small-form textarea{
     height: 150px;
 }
 
@@ -303,7 +303,6 @@ body {
 
 .side-box-comment-img {
     width: 40%;
-
 }
 
 /***ukrywa side-section przy niższej rozdzielce***/

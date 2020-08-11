@@ -58,10 +58,12 @@
                     <div>
                         <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                     </div>
-                    <div class="col comment-form">
+                    <div class="col small-form">
                         {% csrf_token %}
                         {{ comment_form.non_field_errors }}
                         {{ comment_form.content }}
+                        {{ comment_form.owner }}
+                        {{ comment_form.post }}
                         <div class="col-12 d-flex justify-content-between mt-2 p-0">
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item pointer-buttons">B</li>
@@ -76,7 +78,6 @@
                                         img
                                     </label>
                                     {{ comment_form.img }}
-
                                 </li>
                                 <li class="list-group-item pointer-buttons">ankieta</li>
                             </ul>
