@@ -16,7 +16,7 @@
                             {{ micro_post_form.tag }}
                             {{ micro_post_form.author }}
                             <div class="col-12 d-flex justify-content-between mt-2 p-0">
-                                <ul class="list-group list-group-horizontal">
+                                <ul class="list-group list-group-horizontal d-flex flex-wrap">
                                     <li class="list-group-item pointer-buttons">B</li>
                                     <li class="list-group-item pointer-buttons">I</li>
                                     <li class="list-group-item pointer-buttons">"</li>
@@ -50,7 +50,7 @@
                                 <span class="text-muted mini-font">{{ post.date_posted|date:"F d, Y" }}</span>
                             </div>
                             <div class="col-2 d-flex justify-content-end">
-                                <i class="icon-plus-outline green-font">1231</i>
+                                <i class="icon-plus-outline green-font icon">{{ post.likes }}</i>
                             </div>
                         </div>
                         {% if post.content %}

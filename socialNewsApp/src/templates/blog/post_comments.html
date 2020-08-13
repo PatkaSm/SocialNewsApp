@@ -11,7 +11,12 @@
                 <a href="{% url 'profile' pk=comment.owner.id %}"><span
                         class="blue-font small">@{{ comment.owner.username }}</span></a>
                 <small class="text-muted"> {{ comment.date_added|naturaltime }}</small>
+                {% if request.user.id == comment.owner.id %}
+                    <i class="red-font icon icon-pencil"></i>
+                    <i class="red-font icon icon-trash-empty" data-toggle="modal" data-target="#exampleModal"></i>
+                {% endif %}
             </div>
+            {% include 'blog/alert.html' with pk=comment.post.id id=comment.id object='komentarz'%}
             <div class="col d-flex justify-content-end">
                 <i class="icon icon-thumbs-up green-font">{{ comment.likes }}</i>
                 <i class="icon icon-thumbs-down red-font">{{ comment.dislikes }}</i>
@@ -31,3 +36,6 @@
         </div>
     </div>
 </div>
+<script>
+    $('#myModal').modal(options)
+</script>

@@ -1,6 +1,8 @@
 from comment.forms import CommentForm
 from comment.models import Comment
+from django.contrib import messages
 from django.db.models import Count, Q
+from django.template.context_processors import request
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin
@@ -54,7 +56,7 @@ class PostDetailView(DetailView, FormMixin):
             'similar_posts': similar_posts,
             'post_comments': post_comments,
             'comment_form': CommentForm(initial={'post': self.object, 'owner': self.request.user.id}),
-            'comments': post_comments.count()
+            'comments': post_comments.count(),
         }
         return context
 
@@ -63,6 +65,7 @@ class PostDetailView(DetailView, FormMixin):
         form = self.get_form()
         if form.is_valid():
             form.save()
+            messages.success(request, 'Komentarz został dodany!')
             return super(PostDetailView, self).form_valid(form)
         else:
             return self.form_invalid(form)
