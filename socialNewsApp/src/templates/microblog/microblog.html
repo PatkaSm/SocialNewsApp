@@ -13,7 +13,8 @@
                             {{ micro_post_form.non_field_errors }}
                             {{ micro_post_form.content }}
                             <small class="text-muted">Tagi(zapisuj je oddzielone przecinkiem: tag1,tag2,tag3...)</small>
-                            {{ micro_post_form.tag }}
+                            {{ tags_form.non_field_errors }}
+                            {{ tags_form.word }}
                             {{ micro_post_form.author }}
                             <div class="col-12 d-flex justify-content-between mt-2 p-0">
                                 <ul class="list-group list-group-horizontal d-flex flex-wrap">
@@ -48,6 +49,14 @@
                             <div class="col-10">
                                 <a href="{% url 'profile' pk=post.author.id %}" class="blue-font">{{ post.author }}</a>
                                 <span class="text-muted mini-font">{{ post.date_posted|date:"F d, Y" }}</span>
+                                {% if request.user == post.author %}
+                                    <a href="{% url 'post-update' pk=post.id %}">
+                                        <i class="red-font icon icon-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'post-delete' pk=post.id %}">
+                                        <i class="red-font icon icon-trash-empty"></i>
+                                    </a>
+                                {% endif %}
                             </div>
                             <div class="col-2 d-flex justify-content-end">
                                 <i class="icon-plus-outline green-font icon">{{ post.likes }}</i>
@@ -86,7 +95,7 @@
                         {% for side_post in popular_posts %}
                             <div class="side-box-post p-2">
                                 {% if side_post.image %}
-                                <img src="{{ side_post.image.url }}" class="side-box-post-img" alt="post-img">
+                                    <img src="{{ side_post.image.url }}" class="side-box-post-img" alt="post-img">
                                 {% endif %}
                                 <div class="side-box-post-text">
                                     <small class="blue-font">{{ side_post.content }}</small>

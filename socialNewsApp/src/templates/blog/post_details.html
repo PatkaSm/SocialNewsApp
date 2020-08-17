@@ -34,6 +34,16 @@
                                     <i class="icon-lock grey-font"> Zgłoś</i>
                                 </small>
                             </div>
+                            <div class="col">
+                                {% if request.user == post.author %}
+                                    <a href="{% url 'post-update' pk=post.id %}">
+                                        <i class="red-font icon icon-pencil"></i>
+                                    </a>
+                                    <a href="{% url 'post-delete' pk=post.id %}">
+                                        <i class="red-font icon icon-trash-empty"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -51,6 +61,7 @@
                     {% for comment in post_comments %}
                         {% include 'blog/post_comments.html' %}
                     {% endfor %}
+
                 </div>
             </div>
             {% if user.is_authenticated %}

@@ -1,0 +1,21 @@
+from blog.models import Post
+from django import forms
+
+
+class PostUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'content', 'image', 'tag', 'link')
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'form-control'
+            }),
+            'link': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+
+
+        }

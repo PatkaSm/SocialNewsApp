@@ -1,11 +1,12 @@
+from blog.forms import PostUpdateForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from django.contrib import messages
 from django.db.models import Count, Q
-from django.template.context_processors import request
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, UpdateView
 from likes.models import Reaction
 from datetime import datetime, timedelta
 
@@ -108,3 +109,33 @@ class NewPostsListView(ListView):
             'popular_posts': popular_posts
         }
         return context
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = 'blog/post_edit.html'
+    form_class = PostUpdateForm
+
+    def get_context_data(self, **kwargs):
+        post_data = self.object
+        post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
+        post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
+
+        context = {
+            'post': post_data,
+            'post_up_vote': post_reactions_upvote,
+            'post_down_vote': post_reactions_down_vote,
+            'form': self.get_form(),
+        }
+        return context
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.object.id})
+
+
+def post_delete(request, pk):
+    query = Post.objects.get(id=pk)
+    query.delete()
+    messages.warning(request, 'Post został usunięty!')
+    return HttpResponseRedirect(reverse('blog-home'))
+

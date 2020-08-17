@@ -11,10 +11,11 @@
             <div class="modal-body d-flex flex-column">
                 <p class="d-flex justify-content-center"> Czy na pewno chcesz usunąć {{ object }}?</p>
                 <small class="d-flex justify-content-center"> Upewnij się, ponieważ usuwanie jest permanentne!</small>
+                {{ id }}
             </div>
             <div class="modal-footer justify-content-around">
                 <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Anuluj</button>
-                    <a href="{% url 'comment-delete' pk=pk id=id %}">
+                    <a href="{{ link }}">
                         <button type="button" class="btn btn-outline-success">Usuń</button>
                     </a>
             </div>

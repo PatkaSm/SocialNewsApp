@@ -5,6 +5,7 @@ from django.views.generic.edit import FormMixin
 from likes.models import Reaction
 from mikroblog.forms import MicroPostForm
 from mikroblog.models import MicroPost
+from tag.forms import TagForm
 from tag.models import Tag
 
 
@@ -26,14 +27,24 @@ class MicroPostListView(ListView, FormMixin):
             'posts': posts,
             'popular_tags': popular_tags,
             'popular_posts': popular_posts,
-            'micro_post_form': MicroPostForm(initial={'author': self.request.user.id,})
+            'micro_post_form': MicroPostForm(initial={'author': self.request.user.id}),
+            'tags_form': TagForm()
         }
         return context
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            form.save()
+        form = self.get_form(MicroPostForm)
+        tag_form = self.get_form(TagForm)
+        if form.is_valid() & tag_form.is_valid():
+            micropost = form.save()
+            tags_data = tag_form.cleaned_data['word'].split(',')
+            for word in tags_data:
+                used_tag = Tag.objects.filter(word=word)
+                if used_tag.exists():
+                    micropost.tag.add(used_tag[0])
+                else:
+                    tag = Tag.objects.create(word=word)
+                    micropost.tag.add(tag)
             return super(MicroPostListView, self).form_valid(form)
         else:
             print(form.errors)
