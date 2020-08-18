@@ -9,8 +9,11 @@
                             <span>{{ post.likes }}</span>
                             <button class="btn btn-dark"><small>Podbij</small></button>
                         </div>
-                        <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image.url }}"
-                             alt="Post-img">
+                        {% if post.image %}
+                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image.url }}" alt="Post-img">
+                        {% else %}
+                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image_url }}" alt="Post-img">
+                        {% endif %}
                         <div class="media-body col-12 col-sm-12 col-md-7 col-lg-8">
                             <div class="article-top-box">
                                 <h5><a href="{% url 'post-detail' pk=post.id %}">{{ post.title }}</a></h5>
@@ -32,19 +35,23 @@
             <p class="list-group-item list-group-item-light m-0">Ostatnio popularne</p>
             <div class="list-group-item-light mb-1">
                 {% for pop_post in popular_posts %}
-                <div class="side-box-post p-2">
-                    <img src="{{ pop_post.image.url }}" class="side-box-post-img" alt="post-img">
-                    <div class="side-box-post-text">
-                        <small>
-                            <a href="{% url 'post-detail' pk=pop_post.id %}" class="blue-font">
-                                {{ pop_post.title }}
-                            </a>
-                        </small>
-                        <small>
-                            <i class="icon-thumbs-up red-font">{{ pop_post.likes }}</i>
-                        </small>
+                    <div class="side-box-post p-2">
+                        {% if pop_post.image %}
+                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ pop_post.image.url }}" alt="Post-img">
+                        {% else %}
+                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ pop_post.image_url }}" alt="Post-img">
+                        {% endif %}
+                        <div class="side-box-post-text">
+                            <small>
+                                <a href="{% url 'post-detail' pk=pop_post.id %}" class="blue-font">
+                                    {{ pop_post.title }}
+                                </a>
+                            </small>
+                            <small>
+                                <i class="icon-thumbs-up red-font">{{ pop_post.likes }}</i>
+                            </small>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
         </div>

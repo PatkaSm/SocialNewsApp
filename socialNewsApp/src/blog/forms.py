@@ -16,6 +16,16 @@ class PostUpdateForm(forms.ModelForm):
             'link': forms.TextInput(attrs={
                 'class': 'form-control'
             }),
+        }
 
 
+class UrlPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('link', 'author')
+        widgets = {
+            'author': forms.HiddenInput(),
+            'link': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
         }

@@ -6,12 +6,14 @@
             <form method="post">{% csrf_token %}
                 {{ form.non_field_errors }}
                 <div class="col-12 p-0 mt-1">
+                    <label>Tytuł: </label>
                     {{ form.title }}
                 </div>
                 <div class="col-12 p-0 mt-1">
+                    <label>Treść: </label>
                     {{ form.content }}
                 </div>
-                <div class="col-12 d-flex justify-content-between mt-1 p-0 small-form">
+                <div class="col-12 d-flex justify-content-between mt-1 p-0 small-form bg-light">
                     <ul class="list-group list-group-horizontal d-flex flex-wrap">
                         <li class="list-group-item pointer-buttons">B</li>
                         <li class="list-group-item pointer-buttons">I</li>
@@ -22,15 +24,18 @@
                         <li class="list-group-item pointer-buttons">( ͡° ͜ʖ ͡°)</li>
                     </ul>
                 </div>
-                <div class="col-12 p-0 mt-1">
-                    {{ form.link }}
+                {% if post.link %}
+                    <div class="col-12 p-0 mt-1">
+                        <label>Link do artykułu: </label>
+                        {{ form.link }}
+                    </div>
+                {% endif %}
+                <div class="col-12 bg-light p-2 mt-1">
+                    <label>Tagi: </label>
+                    {{ form.tag }}
                 </div>
                 <div class="col-12 bg-light p-2 mt-1">
                     {{ form.image }}
-                </div>
-
-                <div class="col-12 bg-light p-2 mt-1">
-                    {{ form.tag }}
                 </div>
                 <div class="col-12 d-flex justify-content-center mt-3">
                     <input class="btn btn-success" type="submit" value="Zapisz">

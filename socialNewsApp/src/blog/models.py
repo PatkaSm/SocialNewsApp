@@ -2,14 +2,15 @@ from django.db import models
 from django.utils import timezone
 from tag.models import Tag
 from user.models import User
+from bs4 import BeautifulSoup
+import requests
 
 
 def upload_location(instance, filename):
-    return "post %s/%s" %(instance.id, filename)
+    return "post %s/%s" % (instance.id, filename)
 
 
 class Post(models.Model):
-
     class Type(models.TextChoices):
         URL = "url", "Url"
         TEXT = "txt", "Tekstowy"
@@ -20,7 +21,8 @@ class Post(models.Model):
     content = models.TextField()
     tag = models.ManyToManyField(Tag, related_name='posts')
     date_posted = models.DateTimeField(default=timezone.now)
-    image = models.ImageField(blank=True, max_length=None, default='user.png', upload_to=upload_location)
+    image = models.ImageField(blank=True, null=True, max_length=None, upload_to=upload_location)
+    imag_url = models.URLField(blank=True, null=True)
     link = models.URLField(blank=True)
 
     def __str__(self):

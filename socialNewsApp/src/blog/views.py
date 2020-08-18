@@ -1,4 +1,4 @@
-from blog.forms import PostUpdateForm
+from blog.forms import PostUpdateForm, UrlPostForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from django.contrib import messages
@@ -6,11 +6,11 @@ from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import FormMixin, UpdateView
+from django.views.generic.edit import FormMixin, UpdateView, CreateView
 from likes.models import Reaction
 from datetime import datetime, timedelta
-
-
+from bs4 import BeautifulSoup
+import requests
 from .models import Post
 
 
@@ -25,7 +25,6 @@ class PostListView(ListView):
         popular_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
                                                                                                  'date_posted')[:6]
-
         context = {
             'posts': posts,
             'popular_posts': popular_posts
@@ -39,7 +38,17 @@ class PostDetailView(DetailView, FormMixin):
     form_class = CommentForm
 
     def get_context_data(self, **kwargs):
-        post_data = kwargs['object']
+        post_data = self.object
+        if post_data.link:
+            soup = BeautifulSoup(requests.get(post_data.link).content, 'html')
+            post_data.title = soup.title.string
+            meta = soup.find_all('meta')
+            for tag in meta:
+                if 'property' in tag.attrs and tag.attrs['property'].lower() in ['og:description']:
+                    post_data.content = tag.attrs['content']
+                if 'property' in tag.attrs and tag.attrs['property'].lower() in ['og:image']:
+                    post_data.image_url = tag.attrs['content']
+
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -111,6 +120,27 @@ class NewPostsListView(ListView):
         return context
 
 
+class UrlPostCreate(CreateView):
+    model = Post
+    template_name = 'blog/new_post.html'
+    form_class = UrlPostForm
+
+    def get_context_data(self, **kwargs):
+        post_data = self.object
+
+        context = {
+            'post': post_data,
+            'form': self.get_form(),
+        }
+        return context
+
+
+class ArticlePostCreate(CreateView):
+    model = Post
+    template_name = 'blog/new_text_post.html'
+    form_class = PostUpdateForm
+
+
 class PostUpdateView(UpdateView):
     model = Post
     template_name = 'blog/post_edit.html'
@@ -138,4 +168,9 @@ def post_delete(request, pk):
     query.delete()
     messages.warning(request, 'Post został usunięty!')
     return HttpResponseRedirect(reverse('blog-home'))
+
+
+
+
+
 
