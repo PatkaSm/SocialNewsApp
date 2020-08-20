@@ -15,9 +15,10 @@ body {
     cursor: pointer;
 }
 
+
 .grey-font:hover {
-    color: #363636;
-    text-decoration: none;
+    color: #333333;
+    cursor: pointer;
 }
 
 .blue-font {
@@ -26,7 +27,7 @@ body {
 }
 
 .blue-font:hover {
-    color: #e04813;
+    color: #cc3300;
     cursor: pointer;
     text-decoration: none;
 }

@@ -13,8 +13,12 @@
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">W Twoje ręce wpadła ciekawa informacja? Dodaj link do swojego znaleziska i
                         podziel się nim z innymi.</h5>
-                    {{ form }}
-                    <a href="#" class="btn btn-outline-info mt-3">Dodaj artykuł z sieci!</a>
+                    <form method="post" class="d-flex flex-column">
+                        {% csrf_token %}
+                        {{ form }}
+                        {{ tag_form }}
+                        <button class="btn btn-outline-info mt-3">Dodaj artykuł z sieci!</button>
+                    </form>
                 </div>
             </div>
             <div class="card">

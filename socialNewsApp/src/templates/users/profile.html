@@ -5,17 +5,21 @@
         <div class="row mt-1">
             <div class="col">
                 <div class="row background-img-div border-line">
-                <a href="{% url 'background-edit' pk=user.id %}">
-                    <span class="background-text"> Zmień swoje zdjęcie w tle!</span>
-                </a>
-                    {% if user.background.url != None %}
+                    {% if user == request.user %}
+                        <a href="{% url 'background-edit' pk=user.id %}">
+                            <span class="background-text"> Zmień swoje zdjęcie w tle!</span>
+                        </a>
+                    {% endif %}
+                    {% if user.background.url %}
                         <img class="background-img" src="{{ user.background.url }}" alt="avatar">
                     {% endif %}
                 </div>
                 <div class="row bg-light border-line align-items-center">
                     <div class="avatar-img-div">
                         <img class="rounded-circle account-img ml-2" src="{{ user.avatar.url }}" alt="avatar">
-                        <div class="edit-avatar"></div>
+                        {% if user == request.user %}
+                           <a href="{% url 'avatar-edit' pk=user.id %}"> <div class="edit-avatar"></div></a>
+                        {% endif %}
                     </div>
                     <div class="col">
                         <span class="username"> {{ user.username }}</span>

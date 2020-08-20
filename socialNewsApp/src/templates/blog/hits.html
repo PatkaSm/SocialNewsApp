@@ -9,8 +9,12 @@
                             <span>{{ post.likes }}</span>
                             <button class="btn btn-dark"><small>Podbij</small></button>
                         </div>
+                    {% if post.image %}
                         <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image.url }}"
                              alt="Post-img">
+                    {% else %}
+                        <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image_url }}"alt="Post-img">
+                    {% endif %}
                         <div class="media-body col-12 col-sm-12 col-md-7 col-lg-8">
                             <div class="article-top-box">
                                 <h5><a href="{% url 'post-detail' pk=post.id %}">{{ post.title }}</a></h5>
@@ -24,8 +28,6 @@
                         </div>
                     </article>
                 {% endfor %}
-            {% else %}
-                Nie ma żdanych Newsów, dodaj swój!
             {% endif %}
         </div>
         <div class="side-section col-3 mt-2">

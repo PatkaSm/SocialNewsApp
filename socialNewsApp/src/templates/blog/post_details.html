@@ -3,7 +3,7 @@
     {% load humanize %}
     <div class="row mt-2">
         <div class="col-md-12 col-lg-9">
-            <article class="bg-light row pt-2  d-flex justify-content-center">
+            <article class="bg-light row pt-2 pb-2 d-flex justify-content-center">
                 <div class="pr-1 mb-2 col-12 col-sm-2 col-md-1 center-box">
                     <span>{{ post_up_vote }}</span>
                     <button class="btn btn-dark"><small>Podbij</small></button>
@@ -29,7 +29,7 @@
                                 </div>
 
                             </div>
-                            <div class="content">
+                            <div class="content pb-3">
                                 <small>{{ post.content }}</small>
                             </div>
                             <div>
@@ -128,7 +128,7 @@
             <div class="list-group-item-light mb-1">
                 {% for similar_post in similar_posts %}
                     <div class="side-box-post p-2">
-                    {% if similar_post.image != None %}
+                    {% if similar_post.image %}
                         <img src="{{ similar_post.image.url }}" class="side-box-post-img" alt="post-img">
                         {% else %}
                         <img src="{{ similar_post.image_url }}" class="side-box-post-img" alt="post-img">

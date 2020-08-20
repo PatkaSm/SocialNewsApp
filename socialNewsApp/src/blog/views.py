@@ -1,3 +1,5 @@
+import string
+
 from blog.forms import PostUpdateForm, UrlPostForm
 from comment.forms import CommentForm
 from comment.models import Comment
@@ -9,8 +11,13 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin, UpdateView, CreateView
 from likes.models import Reaction
 from datetime import datetime, timedelta
+from tag.forms import TagForm
+from tag.models import Tag
 from bs4 import BeautifulSoup
 import requests
+from collections import Counter
+
+
 from .models import Post
 
 
@@ -18,10 +25,10 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
-    ordering = ['-date_posted']
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.all().annotate(likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)))
+        posts = Post.objects.all().annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', '-likes')
         popular_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
                                                                                                  'date_posted')[:6]
@@ -39,16 +46,6 @@ class PostDetailView(DetailView, FormMixin):
 
     def get_context_data(self, **kwargs):
         post_data = self.object
-        if post_data.link:
-            soup = BeautifulSoup(requests.get(post_data.link).content, 'html')
-            post_data.title = soup.title.string
-            meta = soup.find_all('meta')
-            for tag in meta:
-                if 'property' in tag.attrs and tag.attrs['property'].lower() in ['og:description']:
-                    post_data.content = tag.attrs['content']
-                if 'property' in tag.attrs and tag.attrs['property'].lower() in ['og:image']:
-                    post_data.image_url = tag.attrs['content']
-
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -109,7 +106,7 @@ class NewPostsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.filter(date_posted__gte=datetime.now()-timedelta(days=1)).annotate(
+        posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
         popular_posts = posts.order_by('-likes')[:10]
 
@@ -126,19 +123,80 @@ class UrlPostCreate(CreateView):
     form_class = UrlPostForm
 
     def get_context_data(self, **kwargs):
-        post_data = self.object
-
-        context = {
-            'post': post_data,
-            'form': self.get_form(),
-        }
+        context = super(UrlPostCreate, self).get_context_data(**kwargs)
+        context['tag_form'] = TagForm()
         return context
+
+    def get_initial(self):
+        initial = super(UrlPostCreate, self).get_initial()
+        initial = initial.copy()
+        initial['author'] = self.request.user.pk
+        return initial
+
+    def form_valid(self, form):
+        form = self.get_form(UrlPostForm)
+        tag_form = self.get_form(TagForm)
+        if form.is_valid() & tag_form.is_valid():
+            url_post = form.save()
+            tags_data = tag_form.cleaned_data['word'].split(',')
+            for word in tags_data:
+                used_tag = Tag.objects.filter(word=word)
+                if used_tag.exists():
+                    url_post.tag.add(used_tag[0])
+                else:
+                    tag = Tag.objects.create(word=word)
+                    url_post.tag.add(tag)
+            return super(UrlPostCreate, self).form_valid(form)
+        else:
+            print(form.errors)
+            return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
+
+    def get_success_url(self):
+        return reverse('blog-home')
 
 
 class ArticlePostCreate(CreateView):
     model = Post
     template_name = 'blog/new_text_post.html'
     form_class = PostUpdateForm
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticlePostCreate, self).get_context_data(**kwargs)
+        context['tag_form'] = TagForm()
+        return context
+
+    def get_success_url(self):
+        return reverse('blog-home')
+
+    def get_initial(self):
+        initial = super(ArticlePostCreate, self).get_initial()
+        initial = initial.copy()
+        initial['author'] = self.request.user.pk
+        return initial
+
+    def form_valid(self, form):
+        form = self.get_form(ArticlePostCreate)
+        tag_form = self.get_form(TagForm)
+        if form.is_valid() & tag_form.is_valid():
+            url_post = form.save()
+            tags_data = tag_form.cleaned_data['word'].split(',')
+            for word in tags_data:
+                used_tag = Tag.objects.filter(word=word)
+                if used_tag.exists():
+                    url_post.tag.add(used_tag[0])
+                else:
+                    tag = Tag.objects.create(word=word)
+                    url_post.tag.add(tag)
+            return super(ArticlePostCreate, self).form_valid(form)
+        else:
+            print(form.errors)
+            return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class PostUpdateView(UpdateView):
@@ -163,14 +221,14 @@ class PostUpdateView(UpdateView):
         return reverse('post-detail', kwargs={'pk': self.object.id})
 
 
+class SearchListView(ListView):
+    model = Post
+    template_name = 'blog/post_search.html'
+    context_object_name = 'posts'
+
+
 def post_delete(request, pk):
     query = Post.objects.get(id=pk)
     query.delete()
     messages.warning(request, 'Post został usunięty!')
     return HttpResponseRedirect(reverse('blog-home'))
-
-
-
-
-
-
