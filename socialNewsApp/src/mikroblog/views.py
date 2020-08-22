@@ -16,8 +16,13 @@ class MicroPostListView(ListView, FormMixin):
     form_class = MicroPostForm
 
     def get_context_data(self, **kwargs):
+        word = self.request.GET.get('szukaj')
+        if word:
+            query = MicroPost.objects.filter(tag__word=word)
+        else:
+            query = MicroPost.objects.all()
         self.object_list = self.get_queryset()
-        posts = MicroPost.objects.all().annotate(
+        posts = query.annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', 'likes')
         popular_tags = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
         popular_posts = MicroPost.objects.all().annotate(

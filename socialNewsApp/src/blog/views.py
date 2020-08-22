@@ -13,10 +13,6 @@ from likes.models import Reaction
 from datetime import datetime, timedelta
 from tag.forms import TagForm
 from tag.models import Tag
-from bs4 import BeautifulSoup
-import requests
-from collections import Counter
-
 
 from .models import Post
 
@@ -27,7 +23,12 @@ class PostListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.all().annotate(
+        word = self.request.GET.get('szukaj')
+        if word:
+            query = Post.objects.filter(tag__word=word)
+        else:
+            query = Post.objects.all()
+        posts = query.annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', '-likes')
         popular_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
@@ -87,7 +88,12 @@ class HitsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.all().annotate(
+        word = self.request.GET.get('szukaj')
+        if word:
+            query = Post.objects.filter(tag__word=word)
+        else:
+            query = Post.objects.all()
+        posts = query.annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
         popular_comments = Comment.objects.annotate(
             likes=Count('post_comment_reactions',
@@ -106,7 +112,12 @@ class NewPostsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+        word = self.request.GET.get('szukaj')
+        if word:
+            query = Post.objects.filter(tag__word=word)
+        else:
+            query = Post.objects.all()
+        posts = query.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
         popular_posts = posts.order_by('-likes')[:10]
 
@@ -219,12 +230,6 @@ class PostUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('post-detail', kwargs={'pk': self.object.id})
-
-
-class SearchListView(ListView):
-    model = Post
-    template_name = 'blog/post_search.html'
-    context_object_name = 'posts'
 
 
 def post_delete(request, pk):
