@@ -1,19 +1,18 @@
-import string
-
 from blog.forms import PostUpdateForm, UrlPostForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin, UpdateView, CreateView
 from likes.models import Reaction
 from datetime import datetime, timedelta
+from mikroblog.models import MicroPost
 from tag.forms import TagForm
 from tag.models import Tag
-
 from .models import Post
 
 
@@ -23,13 +22,11 @@ class PostListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        word = self.request.GET.get('szukaj')
-        if word:
-            query = Post.objects.filter(tag__word=word)
-        else:
-            query = Post.objects.all()
-        posts = query.annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', '-likes')
+        posts = Post.objects.all().annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                 reactions__owner=self.request.user))).order_by(
+            '-date_posted', '-likes')
         popular_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
                                                                                                  'date_posted')[:6]
@@ -47,6 +44,7 @@ class PostDetailView(DetailView, FormMixin):
 
     def get_context_data(self, **kwargs):
         post_data = self.object
+        is_liked = Reaction.objects.filter(owner=self.request.user, post=post_data).count()
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -55,10 +53,15 @@ class PostDetailView(DetailView, FormMixin):
         post_comments = Comment.objects.filter(post=post_data).annotate(
             likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
             dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
+            is_liked=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE,
+                                                 post_comment_reactions__owner=self.request.user)),
+            is_disliked=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE,
+                                                 post_comment_reactions__owner=self.request.user))
         )
 
         context = {
             'post': post_data,
+            'is_liked':is_liked,
             'post_up_vote': post_reactions_upvote,
             'post_down_vote': post_reactions_down_vote,
             'similar_posts': similar_posts,
@@ -88,13 +91,10 @@ class HitsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        word = self.request.GET.get('szukaj')
-        if word:
-            query = Post.objects.filter(tag__word=word)
-        else:
-            query = Post.objects.all()
-        posts = query.annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
+        posts = Post.objects.all().annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                 reactions__owner=self.request.user))).order_by('-likes')
         popular_comments = Comment.objects.annotate(
             likes=Count('post_comment_reactions',
                         filter=(Q(post_comment_reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes')[:10]
@@ -112,13 +112,10 @@ class NewPostsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        word = self.request.GET.get('szukaj')
-        if word:
-            query = Post.objects.filter(tag__word=word)
-        else:
-            query = Post.objects.all()
-        posts = query.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
+        posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                 reactions__owner=self.request.user))).order_by('-date_posted')
         popular_posts = posts.order_by('-likes')[:10]
 
         context = {
@@ -232,8 +229,42 @@ class PostUpdateView(UpdateView):
         return reverse('post-detail', kwargs={'pk': self.object.id})
 
 
+def search_list_view(request):
+    template = 'blog/post_search.html'
+    word = request.GET.get('szukaj')
+    if word:
+        posts_query = Post.objects.filter(tag__word=word)
+        micro_posts_query = MicroPost.objects.filter(tag__word=word)
+    else:
+        posts_query = Post.objects.all()
+        micro_posts_query = MicroPost.objects.all()
+
+    posts = posts_query.annotate(
+        likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
+    micro_posts = micro_posts_query.annotate(
+        likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
+
+    context = {
+        'posts': posts,
+        'micro_posts': micro_posts
+    }
+    return render(request, template, context)
+
+
 def post_delete(request, pk):
     query = Post.objects.get(id=pk)
     query.delete()
     messages.warning(request, 'Post został usunięty!')
     return HttpResponseRedirect(reverse('blog-home'))
+
+
+def post_like(request, pk):
+    post = Post.objects.get(id=pk)
+    type = Reaction.Type.UPVOTE
+    like, created = Reaction.objects.get_or_create(post=post, owner=request.user, type=type)
+    if not created:
+        like.delete()
+    else:
+        like.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+

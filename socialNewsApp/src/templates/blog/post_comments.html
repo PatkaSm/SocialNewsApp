@@ -19,8 +19,12 @@
                 {% endif %}
             </div>
             <div class="col d-flex justify-content-end">
-                <i class="icon icon-thumbs-up green-font">{{ comment.likes }}</i>
-                <i class="icon icon-thumbs-down red-font">{{ comment.dislikes }}</i>
+                <a href="{% url 'comment-like' pk=comment.post.id id=comment.id %}" class="{% if comment.is_liked == 1 %}green-font{% else %} upvote {% endif %}">
+                    <i class="icon icon-thumbs-up">{{ comment.likes }}</i>
+                </a>
+                <a href="{% url 'comment-dislike' pk=comment.post.id id=comment.id %}" class="{% if comment.is_disliked == 1 %} red-font {% else %} downvote {% endif %}">
+                    <i class="icon icon-thumbs-down">{{ comment.dislikes }}</i>
+                </a>
             </div>
         </div>
         <div class="row pt-2">

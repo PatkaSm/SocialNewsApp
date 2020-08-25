@@ -21,7 +21,6 @@ class MicroPostListView(ListView, FormMixin):
             query = MicroPost.objects.filter(tag__word=word)
         else:
             query = MicroPost.objects.all()
-        self.object_list = self.get_queryset()
         posts = query.annotate(
             likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', 'likes')
         popular_tags = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]

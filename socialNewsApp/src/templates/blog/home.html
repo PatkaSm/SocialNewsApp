@@ -4,28 +4,7 @@
         <div class="col-12 col-lg-9 mt-2">
             {% if posts %}
                 {% for post in posts %}
-                    <article class="media bg-light mb-2 p-3 row">
-                        <div class="col-3 col-sm-2 col-md-1 col-lg-1 center-box">
-                            <span>{{ post.likes }}</span>
-                            <button class="btn btn-dark"><small>Podbij</small></button>
-                        </div>
-                        {% if post.image %}
-                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image.url }}" alt="Post-img">
-                        {% else %}
-                            <img class="post-img col-12 col-sm-12 col-md-5 col-lg-4" src="{{ post.image_url }}" alt="Post-img">
-                        {% endif %}
-                        <div class="media-body col-12 col-sm-12 col-md-7 col-lg-8">
-                            <div class="article-top-box">
-                                <h5><a href="{% url 'post-detail' pk=post.id %}" class="blue-font">{{ post.title }}</a></h5>
-                                <small><a class="blue-font" href="{% url 'profile' pk=post.author.id %}">@{{ post.author }}</a></small>
-                                <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
-                                {% for tag in post.tag.all %}
-                                    <small class="text-muted"> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
-                                {% endfor %}
-                            </div>
-                            <small>{{ post.content | truncatechars:200 }}</small>
-                        </div>
-                    </article>
+                    {% include 'blog/post.html' %}
                 {% endfor %}
             {% else %}
                 Nie ma żdanych Newsów, dodaj swój!

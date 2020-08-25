@@ -15,7 +15,6 @@ body {
     cursor: pointer;
 }
 
-
 .grey-font:hover {
     color: #333333;
     cursor: pointer;
@@ -184,6 +183,29 @@ body {
 .custom-file-upload {
     cursor: pointer;
 }
+
+.upvote {
+    color: #686868;
+    cursor: pointer;
+}
+
+.upvote:hover {
+    color: #19865C;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.downvote {
+   color: #686868;
+    cursor: pointer;
+}
+
+.downvote:hover {
+    color: #cc3300;
+    cursor: pointer;
+    text-decoration: none;
+}
+
 
 /***************************************
  * PROFILE
