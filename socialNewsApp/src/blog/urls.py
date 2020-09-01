@@ -1,5 +1,5 @@
 from blog.views import PostListView, PostDetailView, HitsListView, NewPostsListView, post_delete, PostUpdateView, \
-    UrlPostCreate, ArticlePostCreate, search_list_view, post_like
+    UrlPostCreate, ArticlePostCreate, search_list_view, post_like, tag_stats_list_view
 from comment.views import delete_comment, like_comment, dislike_comment
 from django.urls import path
 from mikroblog.views import MicroPostListView
@@ -16,8 +16,8 @@ urlpatterns = [
     path('post/update/<int:pk>', PostUpdateView.as_view(), name='post-update'),
     path('post/add/', UrlPostCreate.as_view(), name='post-url-create'),
     path('post/add/article', ArticlePostCreate.as_view(), name='post-article-create'),
-    path('mikroblog/', MicroPostListView.as_view(), name='mikroblog'),
     path('hity/', HitsListView.as_view(), name='hity'),
     path('nowe/', NewPostsListView.as_view(), name='nowe'),
+    path('tag/<slug>/', tag_stats_list_view, name='tag_stats'),
 
 ]

@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-lg-9 mt-2">
+            <div class="p-3 bg-light row mb-1 d-flex justify-content-between">
+                <h4 class="font-weight-bold blue-font">#{{ tag }}</h4>
+                <div class="">
+                    <a href="#" class="text-decoration-none btn btn-outline-info"
+                       title="Zaobserwuj ten tag aby być na bieżąco z tą tematyką!">
+                        <i class="icon-eye mr-2"> 312 </i>
+                    </a>
+                    <a href="#" class="text-decoration-none btn btn-outline-danger"
+                        title="Zablokuj ten tag aby nie widzieć treści związanych z tą tematyką!">
+                        <i class="icon-lock">12</i>
+                    </a>
+                </div>
+            </div>
+            {% if posts %}
+                {% for post in posts %}
+                    {% if post.title %}
+                        {% include 'blog/post.html' %}
+                    {% else %}
+                        {% include 'microblog/micro_post.html' %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="side-section col-3 mt-2">
+            <p class="list-group-item list-group-item-light m-0">Ostatnio popularne</p>
+            <div class="list-group-item-light mb-1">
+
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+

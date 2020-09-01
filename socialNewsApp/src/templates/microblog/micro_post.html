@@ -1,0 +1,48 @@
+<div class="comments mb-2">
+    <article class="media bg-light p-2 row">
+        <div>
+            <img class="comment-owner-img" src="{{ post.author.avatar.url }}" alt="avatar">
+        </div>
+        <div class="col">
+            <div class="article-metadata row">
+                <div class="col-10">
+                    <a href="{% url 'profile' pk=post.author.id %}" class="blue-font">{{ post.author }}</a>
+                    <span class="text-muted mini-font">{{ post.date_posted|date:"F d, Y" }}</span>
+                    {% if request.user == post.author %}
+                        <a href="{% url 'post-update' pk=post.id %}">
+                            <i class="red-font icon icon-pencil"></i>
+                        </a>
+                        <a href="{% url 'micro-post-delete' pk=post.id %}">
+                            <i class="red-font icon icon-trash-empty"></i>
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="col-2 d-flex justify-content-end">
+                    <a href="{% url 'micro-post-like' pk=post.id %}">
+                        <i class="icon-plus-outline {% if post.is_liked == 1 %} green-font {% else %} upvote {% endif %}">{{ post.likes }}</i>
+                    </a>
+                </div>
+            </div>
+            {% if post.content %}
+                <small class="post-content">{{ post.content |safe }}</small>
+            {% endif %}
+            <div class="col-12">
+                {% for tag in post.tag.all %}
+                    <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
+                {% endfor %}
+            </div>
+            <div class="col-12">
+                {% if post.image %}
+                    <img class="col-12 col-md-12 micro-post-img" alt="Obrazek" src="{{ post.image.url }}">
+                {% endif %}
+            </div>
+        </div>
+    </article>
+    <div class="row bg-light p-2">
+        <div class="col-12">
+            {% for comment in post.comments.all %}
+                {% include 'microblog/micro_post_comments.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

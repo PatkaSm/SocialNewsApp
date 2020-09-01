@@ -1,4 +1,6 @@
 from django.db.models import Count, Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
@@ -7,6 +9,7 @@ from mikroblog.forms import MicroPostForm
 from mikroblog.models import MicroPost
 from tag.forms import TagForm
 from tag.models import Tag
+from django.contrib import messages
 
 
 class MicroPostListView(ListView, FormMixin):
@@ -16,13 +19,16 @@ class MicroPostListView(ListView, FormMixin):
     form_class = MicroPostForm
 
     def get_context_data(self, **kwargs):
-        word = self.request.GET.get('szukaj')
-        if word:
-            query = MicroPost.objects.filter(tag__word=word)
+        query = MicroPost.objects.all()
+        if self.request.user:
+            posts = query.annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+                is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                     reactions__owner=self.request.user))).order_by('-date_posted', 'likes')
         else:
-            query = MicroPost.objects.all()
-        posts = query.annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted', 'likes')
+            posts = query.annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted',
+                                                                                                    'likes')
         popular_tags = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
         popular_posts = MicroPost.objects.all().annotate(
             likes=Count('reactions', filr=Q(reactions__type=Reaction.Type.UPVOTE)))
@@ -57,3 +63,20 @@ class MicroPostListView(ListView, FormMixin):
     def get_success_url(self):
         return reverse('mikroblog')
 
+
+def micro_post_delete(request, pk):
+    micro_post = get_object_or_404(MicroPost, pk=pk)
+    micro_post.delete()
+    messages.warning(request, 'Wpis został usunięty!')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def micro_post_like(request, pk):
+    micro_post = get_object_or_404(MicroPost, pk=pk)
+    type = Reaction.Type.UPVOTE
+    like, created = Reaction.objects.get_or_create(micro_post=micro_post, owner=request.user, type=type)
+    if not created:
+        like.delete()
+    else:
+        like.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -1,6 +1,5 @@
 from blog.models import Post
 from django import forms
-from likes.models import Reaction
 
 
 class PostUpdateForm(forms.ModelForm):

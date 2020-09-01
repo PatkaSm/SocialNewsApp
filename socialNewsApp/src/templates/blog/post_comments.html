@@ -19,17 +19,19 @@
                 {% endif %}
             </div>
             <div class="col d-flex justify-content-end">
-                <a href="{% url 'comment-like' pk=comment.post.id id=comment.id %}" class="{% if comment.is_liked == 1 %}green-font{% else %} upvote {% endif %}">
+                <a href="{% url 'comment-like' pk=comment.post.id id=comment.id %}"
+                   class="{% if comment.is_liked == 1 %}green-font{% else %} upvote {% endif %}">
                     <i class="icon icon-thumbs-up">{{ comment.likes }}</i>
                 </a>
-                <a href="{% url 'comment-dislike' pk=comment.post.id id=comment.id %}" class="{% if comment.is_disliked == 1 %} red-font {% else %} downvote {% endif %}">
+                <a href="{% url 'comment-dislike' pk=comment.post.id id=comment.id %}"
+                   class="{% if comment.is_disliked == 1 %} red-font {% else %} downvote {% endif %}">
                     <i class="icon icon-thumbs-down">{{ comment.dislikes }}</i>
                 </a>
             </div>
         </div>
         <div class="row pt-2">
             <div class="col-12 p-0 pb-3">
-                {{ comment.content }}
+                {{ comment.content | safe}}
             </div>
             <!-- tu jeszcze warunek if zdjęcie -->
             {% if comment.img %}
@@ -41,3 +43,4 @@
         </div>
     </div>
 </div>
+

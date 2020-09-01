@@ -28,10 +28,9 @@
                                         <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
                                     {% endfor %}
                                 </div>
-
                             </div>
                             <div class="content pb-3">
-                                <small>{{ post.content }}</small>
+                                <small>{{ post.content|safe }}</small>
                             </div>
                             <div>
                                 <small>
@@ -75,30 +74,12 @@
                     </div>
                     <div class="col small-form">
                         {% csrf_token %}
-                        {{ comment_form.non_field_errors }}
-                        {{ comment_form.content }}
-                        {{ comment_form.owner }}
-                        {{ comment_form.post }}
-                        <div class="col-12 d-flex justify-content-between mt-2 p-0">
-                            <ul class="list-group list-group-horizontal d-flex flex-wrap">
-                                <li class="list-group-item pointer-buttons">B</li>
-                                <li class="list-group-item pointer-buttons">I</li>
-                                <li class="list-group-item pointer-buttons">"</li>
-                                <li class="list-group-item pointer-buttons">link</li>
-                                <li class="list-group-item pointer-buttons"> <\></li>
-                                <li class="list-group-item pointer-buttons">spoil</li>
-                                <li class="list-group-item pointer-buttons">( ͡° ͜ʖ ͡°)</li>
-                                <li class="list-group-item pointer-buttons">
-                                    <label for="id_img" class="custom-file-upload">
-                                        img
-                                    </label>
-                                    {{ comment_form.img }}
-                                </li>
-                                <li class="list-group-item pointer-buttons">ankieta</li>
-                            </ul>
-                            <button type="submit" class="btn btn-primary">Dodaj</button>
-                        </div>
+                        {{ comment_form.as_p}}
+                        {{ comment_form.media | safe}}
                     </div>
+                      <div class="col-12 d-flex justify-content-center">
+                            <button type="submit" class="btn btn-outline-info">Dodaj</button>
+                      </div>
                 </form>
             {% endif %}
         </div>

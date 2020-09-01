@@ -4,6 +4,7 @@ from tag.models import Tag
 from user.models import User
 from bs4 import BeautifulSoup
 import requests
+from ckeditor.fields import RichTextField
 
 
 def upload_location(instance, filename):
@@ -18,7 +19,7 @@ class Post(models.Model):
     type = models.CharField(max_length=5, choices=Type.choices)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=100)
-    content = models.TextField()
+    content = RichTextField(blank=True, null=True)
     tag = models.ManyToManyField(Tag, related_name='posts')
     date_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(blank=True, null=True, max_length=None, upload_to=upload_location)

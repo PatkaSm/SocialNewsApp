@@ -15,7 +15,7 @@
             <small><a class="blue-font" href="{% url 'profile' pk=post.author.id %}">@{{ post.author }}</a></small>
             <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             {% for tag in post.tag.all %}
-                <small class="text-muted"> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
+                <small class="text-muted"> <a href="{% url 'tag_stats' slug=tag.word %}" class="grey-font">#{{ tag.word }} </a> </small>
             {% endfor %}
         </div>
         <small>{{ post.content | truncatechars:200 }}</small>

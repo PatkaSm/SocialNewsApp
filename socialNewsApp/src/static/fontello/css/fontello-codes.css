@@ -17,6 +17,10 @@
 .icon-at:before { content: '\e80f'; } /* '' */
 .icon-megaphone:before { content: '\e810'; } /* '' */
 .icon-trash-empty:before { content: '\e811'; } /* '' */
+.icon-search:before { content: '\e812'; } /* '' */
+.icon-eye:before { content: '\e813'; } /* '' */
+.icon-eye-off:before { content: '\e814'; } /* '' */
+.icon-attention:before { content: '\e815'; } /* '' */
 .icon-twitter-circled:before { content: '\f30a'; } /* '' */
 .icon-facebook-squared:before { content: '\f30e'; } /* '' */
 .icon-instagram:before { content: '\f32d'; } /* '' */

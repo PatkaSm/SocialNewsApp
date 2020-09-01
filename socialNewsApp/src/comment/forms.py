@@ -8,7 +8,7 @@ class CommentForm(forms.ModelForm):
         fields = ('content', 'img', 'owner', 'post')
         widgets = {
             'content': forms.Textarea(attrs={
-                'class': 'form-control'
+
             }),
             'owner': forms.HiddenInput(),
             'post': forms.HiddenInput(),

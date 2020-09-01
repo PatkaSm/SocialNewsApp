@@ -1,10 +1,12 @@
+from itertools import chain
+
 from blog.forms import PostUpdateForm, UrlPostForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from django.contrib import messages
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin, UpdateView, CreateView
@@ -13,6 +15,8 @@ from datetime import datetime, timedelta
 from mikroblog.models import MicroPost
 from tag.forms import TagForm
 from tag.models import Tag
+from user.models import User
+
 from .models import Post
 
 
@@ -50,18 +54,24 @@ class PostDetailView(DetailView, FormMixin):
         similar_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).filter(
             tag__in=post_data.tag.all()).exclude(id=post_data.id).distinct().order_by('-likes')[:6]
-        post_comments = Comment.objects.filter(post=post_data).annotate(
-            likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
-            dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
-            is_liked=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE,
-                                                 post_comment_reactions__owner=self.request.user)),
-            is_disliked=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE,
-                                                 post_comment_reactions__owner=self.request.user))
-        )
+        if self.request.user:
+            post_comments = post_data.comments.annotate(
+                likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
+                dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
+                is_liked=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE,
+                                                                  post_comment_reactions__owner=self.request.user)),
+                is_disliked=Count('post_comment_reactions',
+                                  filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE,
+                                           post_comment_reactions__owner=self.request.user)))
+        else:
+            post_comments = post_data.comments.annotate(
+                likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
+                dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
+            )
 
         context = {
             'post': post_data,
-            'is_liked':is_liked,
+            'is_liked': is_liked,
             'post_up_vote': post_reactions_upvote,
             'post_down_vote': post_reactions_down_vote,
             'similar_posts': similar_posts,
@@ -235,9 +245,11 @@ def search_list_view(request):
     if word:
         posts_query = Post.objects.filter(tag__word=word)
         micro_posts_query = MicroPost.objects.filter(tag__word=word)
+        users = User.objects.filter(username__contains=word)
     else:
-        posts_query = Post.objects.all()
-        micro_posts_query = MicroPost.objects.all()
+        posts_query = []
+        micro_posts_query = []
+        users = []
 
     posts = posts_query.annotate(
         likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
@@ -246,20 +258,21 @@ def search_list_view(request):
 
     context = {
         'posts': posts,
-        'micro_posts': micro_posts
+        'micro_posts': micro_posts,
+        'users': users
     }
     return render(request, template, context)
 
 
 def post_delete(request, pk):
-    query = Post.objects.get(id=pk)
-    query.delete()
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
     messages.warning(request, 'Post został usunięty!')
-    return HttpResponseRedirect(reverse('blog-home'))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def post_like(request, pk):
-    post = Post.objects.get(id=pk)
+    post = get_object_or_404(Post, pk=pk)
     type = Reaction.Type.UPVOTE
     like, created = Reaction.objects.get_or_create(post=post, owner=request.user, type=type)
     if not created:
@@ -268,3 +281,18 @@ def post_like(request, pk):
         like.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+def tag_stats_list_view(request, slug):
+    template = 'blog/tag_stats.html'
+
+    posts = Post.objects.filter(tag__word=slug).annotate(
+        likes=Count('reactions', filter=Q(reactions__type__in=Reaction.Type.UPVOTE))).order_by('-likes')
+    micro_posts = MicroPost.objects.filter(tag__word=slug).annotate(
+        likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
+    query = list(chain(posts, micro_posts))
+
+    context = {
+        'posts': query,
+        'tag': slug
+    }
+    return render(request, template, context)
