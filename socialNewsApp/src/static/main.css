@@ -357,8 +357,7 @@ p {
  ***************************************/
 
 .editor {
-    border: 1px solid #adadad;
-    border-radius: 10px;
+    height: 100px;
     width: 100%;
 }
 
@@ -370,15 +369,23 @@ p {
 .textarea-btn {
     width: 35px;
     height: 35px;
-    border: 1px solid #818E96;
-    border-radius: 5px;
     margin: 2px;
     padding: 5px;
     display: flex;
     justify-content: center;
+    border-radius: 5px;
     align-content: center;
+    border: 1px solid #98accb;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    color: grey;
 }
 
+.textarea-btn:hover {
+    border: 1px solid #658cc1;
+    background-color: white;
+    color: #2a2a2a;
+}
 
 #id_image{
     display: none;
