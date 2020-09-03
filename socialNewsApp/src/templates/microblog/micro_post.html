@@ -24,11 +24,11 @@
                 </div>
             </div>
             {% if post.content %}
-                <small class="post-content">{{ post.content |safe }}</small>
+                <small class="post-content ml-3">{{ post.content |safe }}</small>
             {% endif %}
             <div class="col-12">
                 {% for tag in post.tag.all %}
-                    <small> <a href="#" class="grey-font">#{{ tag.word }} </a> </small>
+                    <small> <a href="{% url 'tag_stats' slug=tag.word %}" class="grey-font">#{{ tag.word }} </a> </small>
                 {% endfor %}
             </div>
             <div class="col-12">

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -20,7 +21,7 @@ class MicroPostListView(ListView, FormMixin):
 
     def get_context_data(self, **kwargs):
         query = MicroPost.objects.all()
-        if self.request.user:
+        if self.request.user.is_authenticated:
             posts = query.annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
@@ -45,6 +46,7 @@ class MicroPostListView(ListView, FormMixin):
     def post(self, request, *args, **kwargs):
         form = self.get_form(MicroPostForm)
         tag_form = self.get_form(TagForm)
+        print(request.POST.get('editor'))
         if form.is_valid() & tag_form.is_valid():
             micropost = form.save()
             tags_data = tag_form.cleaned_data['word'].split(',')
@@ -64,6 +66,7 @@ class MicroPostListView(ListView, FormMixin):
         return reverse('mikroblog')
 
 
+@login_required
 def micro_post_delete(request, pk):
     micro_post = get_object_or_404(MicroPost, pk=pk)
     micro_post.delete()
@@ -71,6 +74,7 @@ def micro_post_delete(request, pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def micro_post_like(request, pk):
     micro_post = get_object_or_404(MicroPost, pk=pk)
     type = Reaction.Type.UPVOTE

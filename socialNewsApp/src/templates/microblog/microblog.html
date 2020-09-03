@@ -4,28 +4,42 @@
         <div class="col-lg-9 col-md-12 mt-2">
             {% if user.is_authenticated %}
                 <div class="microPost-form mb-2 ">
-                    <form class="bg-light p-2 row" method="POST" enctype="multipart/form-data">
+                    <form class="bg-light p-2 row" id="form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
                         <div>
                             <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                         </div>
                         <div class="col">
-                            {% csrf_token %}
+                            <iframe class="editor m-0" id="editor" name="editor">
+                            </iframe>
+                            <div class="col-12 textarea-buttons p-0">
+                                <span class="textarea-btn" onclick="underline()">U</span>
+                                <span class="textarea-btn" onclick="bold()">B</span>
+                                <span class="textarea-btn" onclick="italic()">I</span>
+                                <span class="textarea-btn" onclick="">"</span>
+                                <span class="textarea-btn" onclick="link()">Link</span>
+                                <span class="textarea-btn">
+                                    <label for="id_image" class="image_upload">
+                                        {{ micro_post_form.image }}
+                                        img
+                                    </label>
+                                </span>
+                            </div>
+
                             {{ micro_post_form.content }}
-                            {{ micro_post_form.media }}
                             {{ micro_post_form.author }}
                             <div>
-                                {{ micro_post_form.image }}
                             </div>
                             {{ tags_form.as_p }}
                         </div>
-                        <div class="col-12 d-flex justify-content-center mt-2">
-                            <button type="submit" class="btn btn-outline-info">Dodaj</button>
-                        </div>
                     </form>
+                    <div class="col-12 d-flex justify-content-center mt-2">
+                        <button class="btn btn-outline-info" onclick="submit()">Dodaj</button>
+                    </div>
                 </div>
             {% endif %}
             {% for post in posts %}
-                    {% include 'microblog/micro_post.html' %}
+                {% include 'microblog/micro_post.html' %}
             {% endfor %}
         </div>
         <div class="side-section col-md-3 mt-2">
@@ -49,7 +63,7 @@
                                     <img src="{{ side_post.image.url }}" class="side-box-post-img" alt="post-img">
                                 {% endif %}
                                 <div class="side-box-post-text">
-                                    <small class="blue-font m-0 p-0">{{ side_post.content | safe}}</small>
+                                    <small class="blue-font m-0 p-0">{{ side_post.content | safe }}</small>
                                     <small>
                                         <i class="icon-thumbs-up red-font">{{ side_post.likes }}</i>
                                     </small>
@@ -78,7 +92,33 @@
             </div>
         </div>
     </div>
-{% endblock content %}
-<script>
+    <script>
 
-</script>
+        function iframe() {
+            editor.document.designMode = 'on';
+        }
+
+        function underline() {
+            editor.document.execCommand("underline", false, null);
+        }
+
+        function bold() {
+            editor.document.execCommand("bold", false, null);
+        }
+
+        function italic() {
+            editor.document.execCommand("italic", false, null);
+        }
+
+        function link() {
+            var url = prompt("Enter the URL", 'http://');
+            editor.document.execCommand("createLink", false, url);
+        }
+
+        function submit() {
+            document.getElementById('id_content').value = window.frames['editor'].document.body.innerHTML;
+            document.getElementById('form').submit();
+        }
+
+    </script>
+{% endblock content %}

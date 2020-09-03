@@ -352,6 +352,37 @@ p {
     width: 40%;
 }
 
+/***************************************
+ * TEAXAREA FORM
+ ***************************************/
+
+.editor {
+    border: 1px solid #adadad;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.textarea-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.textarea-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #818E96;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+
+#id_image{
+    display: none;
+}
 /***ukrywa side-section przy niższej rozdzielce***/
 @media (max-width: 990px) {
     .side-section {

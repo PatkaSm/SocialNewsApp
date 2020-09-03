@@ -9,4 +9,6 @@ class MicroPostForm(forms.ModelForm):
         fields = ('content', 'image', 'author')
         widgets = {
             'author': forms.HiddenInput(),
+            'content': forms.HiddenInput(),
+
         }

@@ -1,12 +1,12 @@
 from comment.models import Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from likes.models import Reaction
 
 
-@login_required(login_url="/")
+@login_required
 def delete_comment(request, pk, id):
     query = Comment.objects.get(id=id)
     query.delete()
@@ -14,7 +14,7 @@ def delete_comment(request, pk, id):
     return HttpResponseRedirect(reverse('post-detail', kwargs={'pk': pk}))
 
 
-@login_required(login_url="/")
+@login_required
 def like_comment(request, pk, id):
     comment = Comment.objects.get(id=id)
     type = Reaction.Type.UPVOTE
@@ -26,7 +26,7 @@ def like_comment(request, pk, id):
     return HttpResponseRedirect(reverse('post-detail', kwargs={'pk': pk}))
 
 
-@login_required(login_url="/")
+@login_required
 def dislike_comment(request, pk, id):
     comment = Comment.objects.get(id=id)
     type = Reaction.Type.DOWNVOTE
@@ -38,7 +38,7 @@ def dislike_comment(request, pk, id):
     return HttpResponseRedirect(reverse('post-detail', kwargs={'pk': pk}))
 
 
-@login_required(login_url="/")
+@login_required
 def delete_micropost_comment(request, pk, id):
     query = Comment.objects.get(id=id)
     query.delete()
@@ -46,7 +46,7 @@ def delete_micropost_comment(request, pk, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-@login_required(login_url="/")
+@login_required
 def like_micropost_comment(request, pk, id):
     comment = Comment.objects.get(id=id)
     type = Reaction.Type.UPVOTE
@@ -58,7 +58,7 @@ def like_micropost_comment(request, pk, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-@login_required(login_url="/")
+@login_required
 def dislike_micropost_comment(request, pk, id):
     comment = Comment.objects.get(id=id)
     type = Reaction.Type.DOWNVOTE

@@ -11,7 +11,7 @@ def upload_location(instance, filename):
 
 class MicroPost(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='micro_posts')
-    content = RichTextField(blank=True, null=True, verbose_name=(''))
+    content = models.TextField(blank=True, null=True)
     tag = models.ManyToManyField(Tag, related_name='micro_posts')
     date_posted = models.DateTimeField(default=timezone.now)
     image = models.ImageField(blank=True, null=True, default=None, upload_to=upload_location)

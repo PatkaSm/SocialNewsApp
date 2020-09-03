@@ -1,9 +1,9 @@
 from itertools import chain
-
 from blog.forms import PostUpdateForm, UrlPostForm
 from comment.forms import CommentForm
 from comment.models import Comment
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -26,11 +26,17 @@ class PostListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.all().annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
-            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
-                                                 reactions__owner=self.request.user))).order_by(
-            '-date_posted', '-likes')
+        if self.request.user.is_authenticated:
+            posts = Post.objects.all().annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+                is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                     reactions__owner=self.request.user))).order_by(
+                '-date_posted', '-likes')
+        else:
+            posts = Post.objects.all().annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by(
+                '-date_posted', '-likes')
+
         popular_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
                                                                                                  'date_posted')[:6]
@@ -54,7 +60,7 @@ class PostDetailView(DetailView, FormMixin):
         similar_posts = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).filter(
             tag__in=post_data.tag.all()).exclude(id=post_data.id).distinct().order_by('-likes')[:6]
-        if self.request.user:
+        if self.request.user.is_authenticated:
             post_comments = post_data.comments.annotate(
                 likes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.UPVOTE)),
                 dislikes=Count('post_comment_reactions', filter=Q(post_comment_reactions__type=Reaction.Type.DOWNVOTE)),
@@ -101,10 +107,14 @@ class HitsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.all().annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
-            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
-                                                 reactions__owner=self.request.user))).order_by('-likes')
+        if self.request.user.is_authenticated:
+            posts = Post.objects.all().annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+                is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                     reactions__owner=self.request.user))).order_by('-likes')
+        else:
+            posts = Post.objects.all().annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
         popular_comments = Comment.objects.annotate(
             likes=Count('post_comment_reactions',
                         filter=(Q(post_comment_reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes')[:10]
@@ -122,12 +132,16 @@ class NewPostsListView(ListView):
     context_object_name = 'posts'
 
     def get_context_data(self, **kwargs):
-        posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
-            likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
-            is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
-                                                 reactions__owner=self.request.user))).order_by('-date_posted')
-        popular_posts = posts.order_by('-likes')[:10]
-
+        if self.request.user.is_authenticated:
+            posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+                is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                     reactions__owner=self.request.user))).order_by('-date_posted')
+            popular_posts = posts.order_by('-likes')[:10]
+        else:
+            posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
+            popular_posts = posts.order_by('-likes')[:10]
         context = {
             'posts': posts,
             'popular_posts': popular_posts
@@ -264,6 +278,7 @@ def search_list_view(request):
     return render(request, template, context)
 
 
+@login_required
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
@@ -271,6 +286,7 @@ def post_delete(request, pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def post_like(request, pk):
     post = get_object_or_404(Post, pk=pk)
     type = Reaction.Type.UPVOTE
