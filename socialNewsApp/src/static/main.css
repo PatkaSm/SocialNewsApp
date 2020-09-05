@@ -6,6 +6,10 @@ p {
     margin-bottom: 0 !important;
 }
 
+a:hover {
+    text-decoration: none;
+}
+
 /***************************************
  * FONTS
  ***************************************/
@@ -47,6 +51,10 @@ p {
     color: #5c5c5c;
     cursor: pointer;
     text-decoration: none;
+}
+
+.yellow-font {
+    color: #ea9c00;
 }
 
 .mini-font {
@@ -390,6 +398,7 @@ p {
 #id_image{
     display: none;
 }
+
 /***ukrywa side-section przy niższej rozdzielce***/
 @media (max-width: 990px) {
     .side-section {

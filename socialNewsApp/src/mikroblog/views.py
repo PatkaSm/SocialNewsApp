@@ -39,14 +39,13 @@ class MicroPostListView(ListView, FormMixin):
             'popular_tags': popular_tags,
             'popular_posts': popular_posts,
             'micro_post_form': MicroPostForm(initial={'author': self.request.user.id}),
-            'tags_form': TagForm()
+            'tags_form': TagForm(),
         }
         return context
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(MicroPostForm)
         tag_form = self.get_form(TagForm)
-        print(request.POST.get('editor'))
         if form.is_valid() & tag_form.is_valid():
             micropost = form.save()
             tags_data = tag_form.cleaned_data['word'].split(',')
@@ -58,9 +57,6 @@ class MicroPostListView(ListView, FormMixin):
                     tag = Tag.objects.create(word=word)
                     micropost.tag.add(tag)
             return super(MicroPostListView, self).form_valid(form)
-        else:
-            print(form.errors)
-            return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse('mikroblog')

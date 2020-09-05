@@ -13,6 +13,7 @@ from django.views.generic.edit import FormMixin, UpdateView, CreateView
 from likes.models import Reaction
 from datetime import datetime, timedelta
 from mikroblog.models import MicroPost
+from subscribe.models import Subscribe
 from tag.forms import TagForm
 from tag.models import Tag
 from user.models import User
@@ -55,6 +56,7 @@ class PostDetailView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         post_data = self.object
         is_liked = Reaction.objects.filter(owner=self.request.user, post=post_data).count()
+        is_fav = post_data.favourite_posts.all()
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -78,18 +80,19 @@ class PostDetailView(DetailView, FormMixin):
         context = {
             'post': post_data,
             'is_liked': is_liked,
+            'is_fav': is_fav,
             'post_up_vote': post_reactions_upvote,
             'post_down_vote': post_reactions_down_vote,
             'similar_posts': similar_posts,
             'post_comments': post_comments,
-            'comment_form': CommentForm(initial={'post': self.object, 'owner': self.request.user.id}),
+            'comment_form': CommentForm(initial={'post': post_data, 'owner': self.request.user.id}),
             'comments': post_comments.count(),
         }
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        form = self.get_form()
+        form = self.get_form(CommentForm)
         if form.is_valid():
             form.save()
             messages.success(request, 'Komentarz został dodany!')
@@ -286,29 +289,25 @@ def post_delete(request, pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-@login_required
-def post_like(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    type = Reaction.Type.UPVOTE
-    like, created = Reaction.objects.get_or_create(post=post, owner=request.user, type=type)
-    if not created:
-        like.delete()
-    else:
-        like.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-
 def tag_stats_list_view(request, slug):
     template = 'blog/tag_stats.html'
-
+    tag = get_object_or_404(Tag, word=slug)
+    is_subscribed = tag.tag_subscriptions.filter(type=Subscribe.Type.SUB)
+    is_blocked = tag.tag_subscriptions.filter(type=Subscribe.Type.BLOCK)
     posts = Post.objects.filter(tag__word=slug).annotate(
         likes=Count('reactions', filter=Q(reactions__type__in=Reaction.Type.UPVOTE))).order_by('-likes')
     micro_posts = MicroPost.objects.filter(tag__word=slug).annotate(
         likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
     query = list(chain(posts, micro_posts))
 
+
     context = {
+        'posts_amount': len(posts),
+        'micro_posts_amount': len(micro_posts),
+        'all_posts_amount': len(query),
         'posts': query,
-        'tag': slug
+        'tag': slug,
+        'is_subscribed': is_subscribed,
+        'is_blocked': is_blocked
     }
     return render(request, template, context)

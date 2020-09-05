@@ -5,12 +5,14 @@
             <div class="p-3 bg-light row mb-1 d-flex justify-content-between">
                 <h4 class="font-weight-bold blue-font">#{{ tag }}</h4>
                 <div class="">
-                    <a href="#" class="text-decoration-none btn btn-outline-info"
+                    <a href="{% url 'tag-subscribe' slug=tag %}"
+                       class="text-decoration-none btn {% if is_subscribed %} btn-info {% else %} btn-outline-info {% endif %}"
                        title="Zaobserwuj ten tag aby być na bieżąco z tą tematyką!">
                         <i class="icon-eye mr-2"> 312 </i>
                     </a>
-                    <a href="#" class="text-decoration-none btn btn-outline-danger"
-                        title="Zablokuj ten tag aby nie widzieć treści związanych z tą tematyką!">
+                    <a href="{% url 'tag-block' slug=tag %}"
+                       class="text-decoration-none btn {% if is_blocked %} btn-danger {% else %}btn-outline-danger {% endif %}"
+                       title="Zablokuj ten tag aby nie widzieć treści związanych z tą tematyką!">
                         <i class="icon-lock">12</i>
                     </a>
                 </div>
@@ -26,10 +28,18 @@
             {% endif %}
         </div>
         <div class="side-section col-3 mt-2">
-            <p class="list-group-item list-group-item-light m-0">Ostatnio popularne</p>
+            <p class="list-group-item list-group-item-light m-0"> Popularność #{{ tag }}:</p>
             <div class="list-group-item-light mb-1">
-
+                <span class="list-group-item list-group-item-light m-0">Posty: {{ posts_amount }}</span>
+                <span class="list-group-item list-group-item-light m-0">Wpisy: {{ mmicro_posts_amount }}</span>
+                <span class="list-group-item list-group-item-light m-0">Wszystko: {{ all_posts_amount }}</span>
             </div>
+            {% if request.user %}
+            <p class="list-group-item list-group-item-light m-0"> Obserwowane tagi:</p>
+            <div class="list-group-item-light mb-1">
+                <span class="list-group-item list-group-item-light m-0">Posty: {{ posts_amount }}</span>
+            </div>
+            {% endif  %}
         </div>
     </div>
 {% endblock content %}

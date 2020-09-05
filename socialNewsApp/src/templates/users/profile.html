@@ -10,18 +10,24 @@
                             <span class="background-text"> Zmień swoje zdjęcie w tle!</span>
                         </a>
                     {% endif %}
-                    {% if user.background.url %}
+                    {% if user.background %}
                         <img class="background-img" src="{{ user.background.url }}" alt="avatar">
+                    {% else %}
+                        <div class="background-img bg-light">
+                        </div>
                     {% endif %}
                 </div>
                 <div class="row bg-light border-line align-items-center">
                     <div class="avatar-img-div">
                         <img class="rounded-circle account-img ml-2" src="{{ user.avatar.url }}" alt="avatar">
                         {% if user == request.user %}
-                           <a href="{% url 'avatar-edit' pk=user.id %}"> <div class="edit-avatar"></div></a>
+                            <a href="{% url 'avatar-edit' pk=user.id %}">
+                                <div class="edit-avatar"></div>
+                            </a>
                         {% endif %}
                     </div>
-                    <div class="col">
+                    <div class="col d-flex justify-content-between">
+                    <div>
                         <span class="username"> {{ user.username }}</span>
                         {% if user.id == request.user.id %}
                             <a href="{% url 'profile-edit' pk=user.id %}" class="blue-font">
@@ -29,6 +35,20 @@
                             </a>
                         {% endif %}
                         <small> na wypoku od {{ user.date_joined|naturaltime }} </small>
+                    </div>
+
+                        <div class="">
+                            <a href="{% url 'user-subscribe' pk=user.id %}"
+                               class="text-decoration-none btn {% if is_subscribed %} btn-info {% else %} btn-outline-info {% endif %}"
+                               title="Zaobserwuj tego użytkownika aby być na bieżąco z jego wpisami!">
+                                <i class="icon-eye mr-2"> 312 </i>
+                            </a>
+                            <a href="{% url 'user-block' pk=user.id %}"
+                               class="text-decoration-none btn {% if is_blocked %} btn-danger {% else %}btn-outline-danger {% endif %}"
+                               title="Zablokuj tego użytkownika aby nie widzieć treści pisanych przez niego!">
+                                <i class="icon-lock">12</i>
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <div class="row bg-light border-line p-3">

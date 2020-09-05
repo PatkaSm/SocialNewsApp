@@ -3,6 +3,7 @@ from django.contrib.auth.views import PasswordChangeView, PasswordChangeDoneView
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import UpdateView, DetailView, CreateView
+from subscribe.models import Subscribe
 from user.forms import UserRegisterForm
 from user.models import User
 
@@ -33,6 +34,8 @@ class UserDetailsView(DetailView):
         user_micro_posts_reactions = user_data.reactions.filter(post=None).count()
         user_posts_reactions = user_data.reactions.filter(micro_post=None).count()
         user_micro_posts = user_data.micro_posts.all().count()
+        is_subscribed = user_data.subscriptions.filter(type=Subscribe.Type.SUB)
+        is_blocked = user_data.subscriptions.filter(type=Subscribe.Type.BLOCK)
         context = {
             'user': user_data,
             'user_posts': user_posts,
@@ -41,7 +44,9 @@ class UserDetailsView(DetailView):
             'user_micro_posts': user_micro_posts,
             'user_post_reactions': user_posts_reactions,
             'user_reactions': user_posts + user_posts_reactions + user_micro_posts_reactions + user_comments +
-                              user_micro_posts
+                              user_micro_posts,
+            'is_subscribed': is_subscribed,
+            'is_blocked': is_blocked
         }
         return context
 
