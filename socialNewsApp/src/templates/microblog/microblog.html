@@ -5,10 +5,10 @@
         <div class="col-lg-9 col-md-12 mt-2">
             {% if user.is_authenticated %}
                 <div class="mb-2 p-0 m-0">
-                    <form class="bg-light p-2 row mt-1" method="POST" enctype="multipart/form-data">
+                    <form class="bg-light p-2 row mt-1" id="form" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div>
-                            <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
+                            <img class="post-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
                         </div>
                         <div class="col">
                             <iframe class="editor form-control m-0" id="editor" name="editor">
@@ -26,7 +26,6 @@
                                     </label>
                                 </span>
                             </div>
-
                             {{ micro_post_form.content }}
                             {{ micro_post_form.author }}
                             {{ tags_form.as_p }}
@@ -47,7 +46,7 @@
                     <span>Popularne tagi</span>
                     <div class="text-muted">
                         {% for tag in popular_tags %}
-                            <a href="#" class="text-muted mini-font">#{{ tag.word }}</a>
+                            <a href="{% url 'tag_stats' slug=tag.word %}" class="text-muted mini-font">#{{ tag.word }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -76,16 +75,7 @@
                 </div>
                 <div class="bg-light">
                     <div class="list-group-item-light">
-                        <div class="side-box-post p-2">
-                            <img src="{{ request.user.avatar.url }}" class="side-box-post-img" alt="post-img">
-                            <div class="side-box-post-text">
-                                <small class="blue-font">Instagram zablokował Madonnę za fałszywe informacje o
-                                    wirusie.</small>
-                                <small>
-                                    <i class="icon-thumbs-up red-font">123</i>
-                                </small>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

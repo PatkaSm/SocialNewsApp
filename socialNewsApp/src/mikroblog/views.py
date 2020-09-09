@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count, Q
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.db.models import Count, Q, F
+from django.http import HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
@@ -25,11 +25,12 @@ class MicroPostListView(ListView, FormMixin):
             posts = query.annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
-                                                     reactions__owner=self.request.user))).order_by('-date_posted', 'likes')
+                                                     reactions__owner=self.request.user))).order_by('-date_posted',
+                                                                                                    'likes')
         else:
             posts = query.annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted',
-                                                                                                    'likes')
+                                                                                                   'likes')
         popular_tags = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
         popular_posts = MicroPost.objects.all().annotate(
             likes=Count('reactions', filr=Q(reactions__type=Reaction.Type.UPVOTE)))

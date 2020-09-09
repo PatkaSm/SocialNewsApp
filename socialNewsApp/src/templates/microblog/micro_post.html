@@ -1,7 +1,7 @@
 <div class="comments mb-2">
     <article class="media bg-light p-2 row">
         <div>
-            <img class="comment-owner-img" src="{{ post.author.avatar.url }}" alt="avatar">
+            <img class="post-owner-img" src="{{ post.author.avatar.url }}" alt="avatar">
         </div>
         <div class="col">
             <div class="article-metadata row">
@@ -40,26 +40,27 @@
         </div>
     </article>
     <div class="row bg-light p-2">
-        <div>
-            <img class="comment-owner-img" src="{{ request.user.avatar.url }}" alt="avatar">
-        </div>
-        <form class="bg-light col p-0 m-0"  method="POST" enctype="multipart/form-data">
-            <div class="small-form col">
-                    <textarea class="editor form-control">
-                        dodać komntowanie mikrowpisów
-                    </textarea>
-                <label for="id_img" class="image_upload" title="Dodaj obrazek">
-                    <i class="icon-picture grey-font"></i>
-                </label>
-            </div>
-            <div class="col-12 d-flex justify-content-center">
-                <button type="submit" class="btn btn-outline-info">Dodaj</button>
-            </div>
-        </form>
-        <div class="col-12">
-            {% for comment in post.comments.all %}
-                {% include 'microblog/micro_post_comments.html' %}
+        <div class="col pl-5">
+            {% for c in  post.comments.all %}
+                <div {% if forloop.counter > 2 %} class="d-none" id="comments-box" {% endif %}>
+                    {% if c.parent == None %}
+                        {% include 'microblog/micro_post_comments.html' with comment=c %}
+                        <div class="col pl-5 mt-3">
+                            {% for child in c.children.all %}
+                                {% include 'microblog/micro_post_comments.html' with comment=child %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
             {% endfor %}
+            <div class="row d-flex justify-content-center">
+                <button type="button" class="more-comments text-justify">
+                    <small class="blue-font">
+                        Więcej komentarzy ({{ post.comments.all.count }})
+                        <i class="icon icon-plus"></i>
+                    </small>
+                </button>
+            </div>
         </div>
     </div>
 </div>

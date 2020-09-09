@@ -56,7 +56,7 @@ class PostDetailView(DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         post_data = self.object
         is_liked = Reaction.objects.filter(owner=self.request.user, post=post_data).count()
-        is_fav = post_data.favourite_posts.all()
+        is_fav = post_data.favourite_posts.filter(owner=self.request.user)
         post_reactions_upvote = post_data.reactions.filter(type=Reaction.Type.UPVOTE).count()
         post_reactions_down_vote = post_data.reactions.filter(type=Reaction.Type.DOWNVOTE).count()
         similar_posts = Post.objects.annotate(
@@ -114,7 +114,8 @@ class HitsListView(ListView):
             posts = Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
-                                                     reactions__owner=self.request.user))).order_by('-likes')
+                                                     reactions__owner=self.request.user)),
+            ).order_by('-likes')
         else:
             posts = Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
@@ -256,6 +257,24 @@ class PostUpdateView(UpdateView):
         return reverse('post-detail', kwargs={'pk': self.object.id})
 
 
+def subscribed_content(request):
+    template = 'blog/subscribe_posts.html'
+    sub_tags = Subscribe.objects.filter(owner=request.user, tag__isnull=False, type=Subscribe.Type.SUB)
+    blocked_tags = Subscribe.objects.filter(owner=request.user, tag__isnull=False, type=Subscribe.Type.BLOCK)
+    sub_users = Subscribe.objects.filter(owner=request.user, user__isnull=False, type=Subscribe.Type.SUB)
+    blocked_users = Subscribe.objects.filter(owner=request.user, user__isnull=False, type=Subscribe.Type.BLOCK)
+    fav_posts = Subscribe.objects.filter(owner=request.user, post__isnull=False, type=Subscribe.Type.SUB)
+
+    context = {
+        'sub_tags': sub_tags,
+        'blocked_tags': blocked_tags,
+        'sub_users': sub_users,
+        'blocked_users': blocked_users,
+        'fav_posts': fav_posts,
+    }
+    return render(request, template, context)
+
+
 def search_list_view(request):
     template = 'blog/post_search.html'
     word = request.GET.get('szukaj')
@@ -299,7 +318,6 @@ def tag_stats_list_view(request, slug):
     micro_posts = MicroPost.objects.filter(tag__word=slug).annotate(
         likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
     query = list(chain(posts, micro_posts))
-
 
     context = {
         'posts_amount': len(posts),

@@ -36,10 +36,10 @@
                                 <small>
                                     {% if request.user %}
                                         <a href="{% url 'fav_post' pk=post.id %}">
-                                            {% if post.is_fav %}
-                                                <i class="icon-star grey-font"> Ulubione</i>
-                                            {% else %}
+                                            {% if is_fav %}
                                                 <i class="icon-star-filled yellow-font"> Ulubione</i>
+                                            {% else %}
+                                                <i class="icon-star grey-font"> Ulubione</i>
                                             {% endif %}
                                         </a>
                                         <a>

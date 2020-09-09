@@ -1,5 +1,5 @@
 {% load humanize %}
-<div class="row bg-light pl-2 pr-2">
+<div class="row bg-light pl-4 pr-2">
     <div class="mr-2">
         <a href="{% url 'profile' pk=comment.owner.id %}">
             <img src="{{ comment.owner.avatar.url }}" alt="avatar" class="comment-owner-img">
@@ -10,22 +10,17 @@
             <div class="col p-0 ">
                 <a href="{% url 'profile' pk=comment.owner.id %}"><span
                         class="blue-font small">@{{ comment.owner.username }}</span></a>
-                <small class="text-muted"> {{ comment.date_added|naturaltime }}</small>
+                <small class="text-muted mini-font"> {{ comment.date_added|naturaltime }}</small>
                 {% if request.user.id == comment.owner.id %}
                     <i class="red-font icon icon-pencil"></i>
-                    <a href="{% url 'micropost-comment-delete' pk=post.id id=comment.id %}">
+                    <a href="{% url 'micropost-comment-delete' id=comment.id %}">
                         <i class="red-font icon icon-trash-empty" data-toggle="modal"></i>
                     </a>
                 {% endif %}
             </div>
             <div class="col d-flex justify-content-end">
-                <a href="#"
-                   class="">
-                    <i class="icon icon-thumbs-up"></i>
-                </a>
-                <a href="#"
-                   class="">
-                    <i class="icon icon-thumbs-down"></i>
+                <a href="{% url 'micropost-comment-like' id=comment.id %}" class="green-font">
+                    <i class="icon icon-thumbs-up">{{ comment.micro_post_comment_reactions.all.count }}</i>
                 </a>
             </div>
         </div>

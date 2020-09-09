@@ -1,0 +1,71 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-lg-9 mt-2">
+            {% if posts %}
+                {% for post in fav_posts %}
+                    {% include 'blog/post.html' %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="side-section col-3 mt-2">
+            <div class="row mt-2">
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">
+                        <small>Obserwowane tagi</small>
+                    </p>
+                    <div class="list-group">
+                        <div class="text-muted p-2">
+                            {% for sub_tag in sub_tags %}
+                                <a href="{% url 'tag_stats' slug=sub_tag.tag.word %}"
+                                   class="text-muted"><small>#{{ sub_tag.tag.word }}</small></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">
+                        <small>Czarna lista tagów</small>
+                    </p>
+                    <div class="list-group">
+                        <div class="text-muted p-2">
+                            {% for sub_b_tag in blocked_tags %}
+                                <a href="{% url 'tag_stats' slug=sub_b_tag.tag.word %}"
+                                   class="text-muted"><small>#{{ sub_b_tag.tag.word }}</small></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">
+                        <small>Obserwowani użytkownicy</small>
+                    </p>
+                    <div class="list-group">
+                        <div class="text-muted p-2">
+                            {% for sub_user in sub_users %}
+                                 <a href="{% url 'profile' pk=sub_user.user.id %}"
+                                       class="white-font"><img src="{{ sub_user.user.avatar.url }}" alt="avatar" class="header-account-img"></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p class="list-group-item list-group-item-light m-0">
+                        <small>Czarna lista użytkowników</small>
+                    </p>
+                    {% if blocked_users %}
+                        <div class="list-group">
+                            <div class="text-muted p-2">
+                                {% for blocked_users in blocked_users %}
+                                    <a href="{% url 'profile' pk=blocked_users.user.id %}"
+                                       class="white-font"><img src="{{ blocked_users.user.avatar.url }}" alt="avatar" class="header-account-img"></a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}

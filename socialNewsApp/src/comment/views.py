@@ -39,7 +39,7 @@ def dislike_comment(request, pk, id):
 
 
 @login_required
-def delete_micropost_comment(request, pk, id):
+def delete_micropost_comment(request, id):
     query = Comment.objects.get(id=id)
     query.delete()
     messages.warning(request, 'Komentarz został usunięty!')
@@ -47,7 +47,7 @@ def delete_micropost_comment(request, pk, id):
 
 
 @login_required
-def like_micropost_comment(request, pk, id):
+def like_micropost_comment(request, id):
     comment = Comment.objects.get(id=id)
     type = Reaction.Type.UPVOTE
     like, created = Reaction.objects.get_or_create(micro_post_comment=comment, owner=request.user, type=type)
@@ -57,14 +57,3 @@ def like_micropost_comment(request, pk, id):
         like.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-
-@login_required
-def dislike_micropost_comment(request, pk, id):
-    comment = Comment.objects.get(id=id)
-    type = Reaction.Type.DOWNVOTE
-    like, created = Reaction.objects.get_or_create(micro_post_comment=comment, owner=request.user, type=type)
-    if not created:
-        like.delete()
-    else:
-        like.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

@@ -80,7 +80,7 @@ a:hover {
 }
 
 .top-header {
-    background-color: #2f6982;
+    background-color: #205067;
 }
 
 .top-header .nav-link, .navbar-brand {
@@ -89,7 +89,7 @@ a:hover {
 }
 
 .navbar-logo {
-    width: 55px;
+    width: 35px;
 }
 
 .header-account-img {
@@ -173,15 +173,22 @@ a:hover {
 }
 
 /***************************************
- * POST UPDATE
+ * POSTS
  ***************************************/
 
+.post-owner-img {
+    width: 55px;
+}
 
+
+.d-none {
+    display: none;
+}
 /***************************************
  * COMMENTS
  ***************************************/
 .comment-owner-img {
-    width: 55px;
+    width: 35px;
 }
 
 .comment-bottom-border {
@@ -189,7 +196,7 @@ a:hover {
 }
 
 .comment-img {
-    width: 80%;
+    width: 40%;
 }
 
 .pointer-buttons {
@@ -232,6 +239,12 @@ a:hover {
     color: #cc3300;
     cursor: pointer;
     text-decoration: none;
+}
+
+.more-comments {
+    border: none;
+    background-color: transparent;
+
 }
 
 
