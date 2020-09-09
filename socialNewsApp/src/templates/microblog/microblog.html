@@ -36,7 +36,7 @@
                     </div>
                 </div>
             {% endif %}
-            {% for post in posts %}
+            {% for post in page_obj %}
                 {% include 'microblog/micro_post.html' %}
             {% endfor %}
         </div>
@@ -46,7 +46,8 @@
                     <span>Popularne tagi</span>
                     <div class="text-muted">
                         {% for tag in popular_tags %}
-                            <a href="{% url 'tag_stats' slug=tag.word %}" class="text-muted mini-font">#{{ tag.word }}</a>
+                            <a href="{% url 'tag_stats' slug=tag.word %}"
+                               class="text-muted mini-font">#{{ tag.word }}</a>
                         {% endfor %}
                     </div>
                 </div>
@@ -80,6 +81,7 @@
                 </div>
             </div>
         </div>
+        {% include 'blog/pagination_nav.html' %}
     </div>
     </body>
     <script>

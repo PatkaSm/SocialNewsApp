@@ -18,31 +18,31 @@ class MicroPostListView(ListView, FormMixin):
     template_name = 'microblog/microblog.html'
     context_object_name = 'posts'
     form_class = MicroPostForm
+    paginate_by = 10
+
+    def get_queryset(self):
+        return MicroPost.objects.all().order_by('-date_posted')
 
     def get_context_data(self, **kwargs):
-        query = MicroPost.objects.all()
+        data = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            posts = query.annotate(
+            data['posts'] = self.object_list.annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
                                                      reactions__owner=self.request.user))).order_by('-date_posted',
                                                                                                     'likes')
         else:
-            posts = query.annotate(
+            data['posts'] = self.object_list.annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted',
                                                                                                    'likes')
-        popular_tags = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
-        popular_posts = MicroPost.objects.all().annotate(
+        data['popular_tags'] = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
+        data['popular_posts'] = MicroPost.objects.all().annotate(
             likes=Count('reactions', filr=Q(reactions__type=Reaction.Type.UPVOTE)))
 
-        context = {
-            'posts': posts,
-            'popular_tags': popular_tags,
-            'popular_posts': popular_posts,
-            'micro_post_form': MicroPostForm(initial={'author': self.request.user.id}),
-            'tags_form': TagForm(),
-        }
-        return context
+        data['micro_post_form'] = MicroPostForm(initial={'author': self.request.user.id}),
+        data['tags_form'] = TagForm()
+
+        return data
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(MicroPostForm)

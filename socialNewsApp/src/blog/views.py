@@ -17,7 +17,6 @@ from subscribe.models import Subscribe
 from tag.forms import TagForm
 from tag.models import Tag
 from user.models import User
-
 from .models import Post
 
 
@@ -25,27 +24,27 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
+    paginate_by = 10
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         if self.request.user.is_authenticated:
-            posts = Post.objects.all().annotate(
+            return Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
                                                      reactions__owner=self.request.user))).order_by(
                 '-date_posted', '-likes')
         else:
-            posts = Post.objects.all().annotate(
+            return Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by(
                 '-date_posted', '-likes')
 
-        popular_posts = Post.objects.annotate(
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['popular_posts'] = Post.objects.annotate(
             likes=Count('reactions', filter=(Q(reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes',
                                                                                                  'date_posted')[:6]
-        context = {
-            'posts': posts,
-            'popular_posts': popular_posts
-        }
-        return context
+        return data
 
 
 class PostDetailView(DetailView, FormMixin):
@@ -108,49 +107,52 @@ class HitsListView(ListView):
     model = Post
     template_name = 'blog/hits.html'
     context_object_name = 'posts'
+    paginate_by = 10
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         if self.request.user.is_authenticated:
-            posts = Post.objects.all().annotate(
+            return Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
                                                      reactions__owner=self.request.user)),
             ).order_by('-likes')
         else:
-            posts = Post.objects.all().annotate(
+            return Post.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-likes')
-        popular_comments = Comment.objects.annotate(
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['popular_comments'] = Comment.objects.annotate(
             likes=Count('post_comment_reactions',
                         filter=(Q(post_comment_reactions__type=Reaction.Type.UPVOTE)))).order_by('-likes')[:10]
 
-        context = {
-            'posts': posts,
-            'popular_comments': popular_comments
-        }
-        return context
+        return data
 
 
 class NewPostsListView(ListView):
     model = Post
     template_name = 'blog/news.html'
     context_object_name = 'posts'
+    paginate_by = 2
 
-    def get_context_data(self, **kwargs):
+    def get_queryset(self):
         if self.request.user.is_authenticated:
-            posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+            return Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
+                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
+                is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
+                                                     reactions__owner=self.request.user)),
+            ).order_by('-likes')
+        else:
+            return Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
                                                      reactions__owner=self.request.user))).order_by('-date_posted')
-            popular_posts = posts.order_by('-likes')[:10]
-        else:
-            posts = Post.objects.filter(date_posted__gte=datetime.now() - timedelta(days=1)).annotate(
-                likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted')
-            popular_posts = posts.order_by('-likes')[:10]
-        context = {
-            'posts': posts,
-            'popular_posts': popular_posts
-        }
-        return context
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['popular_posts'] = self.object_list.order_by('-likes')[:10]
+
+        return data
 
 
 class UrlPostCreate(CreateView):
