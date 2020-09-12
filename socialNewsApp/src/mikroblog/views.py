@@ -21,25 +21,25 @@ class MicroPostListView(ListView, FormMixin):
     paginate_by = 10
 
     def get_queryset(self):
-        return MicroPost.objects.all().order_by('-date_posted')
-
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            data['posts'] = self.object_list.annotate(
+            return MicroPost.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE)),
                 is_liked=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE,
                                                      reactions__owner=self.request.user))).order_by('-date_posted',
                                                                                                     'likes')
         else:
-            data['posts'] = self.object_list.annotate(
+            return MicroPost.objects.all().annotate(
                 likes=Count('reactions', filter=Q(reactions__type=Reaction.Type.UPVOTE))).order_by('-date_posted',
                                                                                                    'likes')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
         data['popular_tags'] = Tag.objects.all().annotate(ilosc=Count('micro_posts')).order_by('-ilosc')[:20]
         data['popular_posts'] = MicroPost.objects.all().annotate(
             likes=Count('reactions', filr=Q(reactions__type=Reaction.Type.UPVOTE)))
 
-        data['micro_post_form'] = MicroPostForm(initial={'author': self.request.user.id}),
+        data['micro_post_form'] = MicroPostForm(initial={'author': self.request.user.id})
         data['tags_form'] = TagForm()
 
         return data
