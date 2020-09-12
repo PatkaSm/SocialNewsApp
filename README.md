@@ -1,4 +1,5 @@
-﻿# SocialNewsApp
+
+# SocialNewsApp
 
 Aplikacja nie jest jeszcze skończona, pozostalo do napisania: chat, dodawanie komentarzy na NewBlog oraz dodanie czarnej listy tagów i userów do queries. Poniżej ss'y tego co działa.
 
@@ -47,9 +48,4 @@ Aplikacja nie jest jeszcze skończona, pozostalo do napisania: chat, dodawanie k
 ![](repoImg/13.png)
 
 ![](repoImg/12.png)
-
-
-
-
-
 
