@@ -2,14 +2,14 @@
 {% block content %}
     {% load static %}
     <div class="row d-flex justify-content-center p-4">
-        <h5>
+        <h5 class="text-muted">
             Chcesz dodać nowy artykuł lub zamieścić gotowy z sieci? Śmiało!
         </h5>
     </div>
     <div class="row bg-light p-4">
         <div class="card-deck">
             <div class="card">
-                <img src="{% static "images/image-newadd-link.png" %}" alt="img">
+                <img src="{% static "images/515374-PIL93P-445.jpg" %}" alt="img" class="add_post_img">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">W Twoje ręce wpadła ciekawa informacja? Dodaj link do swojego znaleziska i
                         podziel się nim z innymi.</h5>
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="card">
-                <img src="{% static "images/image-newadd-own.png" %}" alt="cokolwiek">
+                <img src="{% static "images/Blog Post.jpg" %}" alt="img" class="add_post_img">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title"> Masz coś do powiedzenia? Poszukujesz pomocy? Stworzyłeś coś i chcesz się
                         pochwalić?</h5>
@@ -31,4 +31,6 @@
             </div>
         </div>
     </div>
+    <a href='https://www.freepik.com/vectors/website' class="small text-muted">Website vector created by stories - www.freepik.com</a>
+
 {% endblock %}

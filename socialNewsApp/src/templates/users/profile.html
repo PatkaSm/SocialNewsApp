@@ -26,17 +26,16 @@
                             </a>
                         {% endif %}
                     </div>
-                    <div class="col d-flex justify-content-between">
-                    <div>
-                        <span class="username"> {{ user.username }}</span>
-                        {% if user.id == request.user.id %}
-                            <a href="{% url 'profile-edit' pk=user.id %}" class="blue-font">
-                                <i class="icon icon-pencil"></i>
-                            </a>
-                        {% endif %}
-                        <small> na wypoku od {{ user.date_joined|naturaltime }} </small>
-                    </div>
-
+                    <div class="col d-flex justify-content-between flex-wrap pb-2">
+                        <div class="">
+                            <span class="username"> {{ user.username }}</span>
+                            {% if user.id == request.user.id %}
+                                <a href="{% url 'profile-edit' pk=user.id %}" class="blue-font">
+                                    <i class="icon icon-pencil"></i>
+                                </a>
+                            {% endif %}
+                            <small> na wypoku od {{ user.date_joined|naturaltime }} </small>
+                        </div>
                         <div class="">
                             <a href="{% url 'user-subscribe' pk=user.id %}"
                                class="text-decoration-none btn {% if is_subscribed %} btn-info {% else %} btn-outline-info {% endif %}"

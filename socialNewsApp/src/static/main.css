@@ -63,6 +63,13 @@ a:hover {
 }
 
 
+.add_post_img {
+    height: 210px;
+    object-fit: cover;
+
+}
+
+
 /***************************************
  * icons
  ***************************************/
@@ -99,6 +106,7 @@ a:hover {
 .search-input {
     height: 30px;
     border-radius: 5px 0 0 5px;
+    width: 270px!important;
 }
 
 .search-btn {
@@ -344,6 +352,9 @@ a:hover {
     border-bottom: 2px solid #79aec8;
 }
 
+form a {
+    word-wrap: break-word;
+}
 
 /***************************************
  * SIDE BOX
@@ -385,10 +396,11 @@ a:hover {
 .textarea-buttons {
     display: flex;
     flex-direction: row;
+    justify-content: left;
 }
 
 .textarea-btn {
-    width: 35px;
+    width: 35px !important;
     height: 35px;
     margin: 2px;
     padding: 5px;
@@ -411,6 +423,7 @@ a:hover {
 #id_image{
     display: none;
 }
+
 
 /***ukrywa side-section przy niższej rozdzielce***/
 @media (max-width: 990px) {

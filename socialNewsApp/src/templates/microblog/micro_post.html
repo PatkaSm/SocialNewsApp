@@ -4,20 +4,22 @@
             <img class="post-owner-img" src="{{ post.author.avatar.url }}" alt="avatar">
         </div>
         <div class="col">
-            <div class="article-metadata row">
-                <div class="col-10 p-0">
-                    <a href="{% url 'profile' pk=post.author.id %}" class="blue-font">{{ post.author }}</a>
-                    <span class="text-muted mini-font">{{ post.date_posted|date:"F d, Y" }}</span>
+            <div class="article-metadata row d-flex justify-content-between">
+                <div class="col-10 p-0 d-flex flex-row align-items-center">
+                    <a href="{% url 'profile' pk=post.author.id %}" class="blue-font"> @{{ post.author }}</a>
+                    <small class="text-muted ml-1 p-0 mini-font">{{ post.date_posted|date:"F d, Y" }}</small>
                     {% if request.user == post.author %}
-                        <a href="{% url 'post-update' pk=post.id %}">
-                            <i class="red-font icon icon-pencil"></i>
-                        </a>
-                        <a href="{% url 'micro-post-delete' pk=post.id %}">
-                            <i class="red-font icon icon-trash-empty"></i>
-                        </a>
+                        <div class="d-flex justify-content-start">
+                            <a href="{% url 'post-update' pk=post.id %}">
+                                <i class="red-font icon icon-pencil"></i>
+                            </a>
+                            <a href="{% url 'micro-post-delete' pk=post.id %}">
+                                <i class="red-font icon icon-trash-empty"></i>
+                            </a>
+                        </div>
                     {% endif %}
                 </div>
-                <div class="col-2 d-flex justify-content-end">
+                <div class="    d-flex justify-content-end">
                     <a href="{% url 'micro-post-like' pk=post.id %}">
                         <i class="icon-plus-outline {% if post.is_liked == 1 %} green-font {% else %} upvote {% endif %}">{{ post.likes }}</i>
                     </a>
