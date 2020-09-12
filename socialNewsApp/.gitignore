@@ -80,13 +80,11 @@ target/
 
 ### Django ###
 *.log
-*.pot
 *.pyc
-__pycache__/
 local_settings.py
 .idea/
 
 dev_settings.py
 
-.myvenv
+.venv
 db.sqlite3
