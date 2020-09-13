@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'mikroblog',
     'likes',
     'comment',
-    'subscribe'
+    'subscribe',
+    'channels',
 
 ]
 
@@ -79,6 +80,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
+
+# Channels
+ASGI_APPLICATION = 'mysite.routing.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
